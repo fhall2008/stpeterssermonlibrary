@@ -80,6 +80,9 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
 .empty-state p{font-size:14px;color:var(--ink-muted)}
 .error-box{background:#FEF3F3;border:1px solid #F5CACA;border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem;font-size:14px;color:#8B2020;line-height:1.6}
 .sermon-art{width:72px;height:72px;border-radius:var(--radius);object-fit:cover;flex-shrink:0;background:var(--parchment-dark)}
+.video-player{display:none;margin-top:1rem;border-radius:var(--radius);overflow:hidden;background:#000;aspect-ratio:16/9}
+.video-player iframe{width:100%;height:100%;display:block;border:none}
+.sermon-art{width:72px;height:72px;border-radius:var(--radius);object-fit:cover;flex-shrink:0;background:var(--parchment-dark)}
 .sermon-card-inner{display:flex;gap:1rem;align-items:flex-start;flex:1;min-width:0}
 .audio-player{display:none;margin-top:1rem;background:var(--parchment-dark);border-radius:var(--radius);padding:0.75rem 1rem;border:1px solid var(--border)}
 .audio-player audio{width:100%;height:36px;display:block;accent-color:var(--gold)}
@@ -312,7 +315,9 @@ function parseAndRender(items, feedChannelImage) {
       audioUrl: item.audioUrl || '', link: item.link || '', duration: item.duration || '',
       speaker: item.speaker || meta.speaker || 'Unknown',
       book: book, series: series, service: meta.service, topic: meta.topic,
-      image: item.image || ''
+      image: item.image || '',
+      videoId: item.videoId || '',
+      videoUrl: item.videoUrl || ''
     });
   });
 
@@ -445,7 +450,8 @@ function card(s, first) {
   var date = fmtDate(s.parsedDate);
   var dur  = fmtDur(s.duration);
   var hasAudio = !!s.audioUrl;
-  var playIcon = '<svg viewBox="0 0 16 16"><path d="M3 2.5l10 5.5-10 5.5V2.5z"/></svg>';
+  var playIcon  = '<svg viewBox="0 0 16 16"><path d="M3 2.5l10 5.5-10 5.5V2.5z"/></svg>';
+  var watchIcon = '<svg viewBox="0 0 20 14" style="fill:#fff;width:14px;height:10px"><path d="M19.5 2.2A2.5 2.5 0 0017.6.3C16.1 0 10 0 10 0S3.9 0 2.4.3A2.5 2.5 0 00.5 2.2 26 26 0 000 7a26 26 0 00.5 4.8 2.5 2.5 0 001.9 1.9C3.9 14 10 14 10 14s6.1 0 7.6-.3a2.5 2.5 0 001.9-1.9A26 26 0 0020 7a26 26 0 00-.5-4.8zM8 10V4l5 3-5 3z"/></svg>';
   var img = s.image || channelImage;
   return '<div class="sermon-card' + (first ? ' first-card' : '') + '" id="card-' + s.id + '">' +
     '<div class="sermon-card-inner">' +
@@ -460,6 +466,7 @@ function card(s, first) {
       '</div>' +
       (s.desc ? '<div class="sermon-desc">' + esc(s.desc) + '</div>' : '') +
       (hasAudio ? '<div class="audio-player" id="player-' + s.id + '"><audio controls preload="none" src="' + esc(s.audioUrl) + '"></audio></div>' : '') +
+      (s.videoId ? '<div class="video-player" id="video-' + s.id + '"></div>' : '') +
     '</div>' +
     '</div>' +
     '<div class="sermon-actions">' +
@@ -467,6 +474,9 @@ function card(s, first) {
       (hasAudio
         ? '<button class="btn-listen" onclick="togglePlayer(' + s.id + ',this)">' + playIcon + 'Listen</button>'
         : '<a href="' + esc(s.link || '#') + '" target="_blank" rel="noopener" class="btn-listen">' + playIcon + 'Listen</a>') +
+      (s.videoId
+        ? '<button class="btn-listen btn-watch" onclick="toggleVideo(\'' + s.videoId + '\',' + s.id + ',this)" style="background:#8B2020">' + watchIcon + 'Watch</button>'
+        : '') +
     '</div>' +
   '</div>';
 }
@@ -491,6 +501,33 @@ function togglePlayer(id, btn) {
     player.style.display = 'block';
     player.querySelector('audio').play();
     btn.innerHTML = '<svg viewBox="0 0 16 16"><rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/></svg>Pause';
+  }
+}
+
+function toggleVideo(videoId, id, btn) {
+  var vp = document.getElementById('video-' + id);
+  if (!vp) return;
+  var isOpen = vp.style.display === 'block';
+  // Close all open players
+  document.querySelectorAll('.audio-player').forEach(function(p) {
+    p.style.display = 'none';
+    var a = p.querySelector('audio'); if (a) a.pause();
+    var b = p.closest('.sermon-card').querySelector('.btn-listen');
+    if (b) b.innerHTML = '<svg viewBox="0 0 16 16"><path d="M3 2.5l10 5.5-10 5.5V2.5z"/></svg>Listen';
+  });
+  document.querySelectorAll('.video-player').forEach(function(v) {
+    if (v !== vp) { v.style.display = 'none'; v.innerHTML = ''; }
+    var b = v.closest('.sermon-card') && v.closest('.sermon-card').querySelector('.btn-watch');
+    if (b) b.innerHTML = '<svg viewBox="0 0 16 16" style="fill:#fff"><path d="M6 3.5l7 4.5-7 4.5V3.5z"/><rect x="1" y="2" width="2.5" height="12" rx="1"/></svg>Watch';
+  });
+  if (isOpen) {
+    vp.style.display = 'none';
+    vp.innerHTML = '';
+    btn.innerHTML = '<svg viewBox="0 0 16 16" style="fill:#fff"><path d="M6 3.5l7 4.5-7 4.5V3.5z"/><rect x="1" y="2" width="2.5" height="12" rx="1"/></svg>Watch';
+  } else {
+    vp.style.display = 'block';
+    vp.innerHTML = '<iframe src="https://www.youtube.com/embed/' + videoId + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+    btn.innerHTML = '<svg viewBox="0 0 16 16" style="fill:#fff"><rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/></svg>Pause';
   }
 }
 
