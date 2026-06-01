@@ -338,7 +338,10 @@ function parseAndRender(xml) {
   var items = xml.querySelectorAll('item');
   var sermons = [];
   items.forEach(function(item, idx) {
-    var title = getT(item,'title');
+    var rawTitle = getT(item,'title');
+    var pipeParts = rawTitle.split('|');
+    var title  = pipeParts[0].trim();
+    var titleSeries = pipeParts.length > 1 ? pipeParts[pipeParts.length - 1].trim() : '';
     var desc  = getT(item,'description') || '';
     var pub   = getT(item,'pubDate');
     var enc   = item.querySelector('enclosure');
@@ -347,6 +350,7 @@ function parseAndRender(xml) {
     var sub     = getItunes(item,'subtitle');
     var dur     = getItunes(item,'duration');
     var meta = extractMeta([title,desc,summary,sub].join(' '));
+    var series = titleSeries || meta.series;
     sermons.push({
       id: idx, title: title,
       desc: (summary || desc).replace(/<[^>]+>/g,'').trim(),
@@ -354,7 +358,7 @@ function parseAndRender(xml) {
       audioUrl: enc ? enc.getAttribute('url') : '',
       link: getT(item,'link'), duration: dur,
       speaker: author || meta.speaker || 'Unknown',
-      book: meta.book, series: meta.series, service: meta.service, topic: meta.topic
+      book: meta.book, series: series, service: meta.service, topic: meta.topic
     });
   });
 
