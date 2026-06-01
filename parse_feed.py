@@ -4,19 +4,9 @@ from datetime import datetime
 
 NS = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd'}
 
-YOUTUBE_API_KEY = os.environ.get('YOUTUBE_API_KEY', '')
-YOUTUBE_HANDLE  = '@StPetersHornsby'
-
-# Anchor/Spotify audiograms always contain these in their description.
-# Real sermon videos will NOT have these.
-AUDIOGRAM_MARKERS = [
-    'anchor.fm',
-    'spotify.com/episode',
-    'open.spotify.com',
-    'podcasters.spotify.com',
-    'this episode is also available as a podcast',
-    'listen to this episode from',
-]
+YOUTUBE_API_KEY      = os.environ.get('YOUTUBE_API_KEY', '')
+YOUTUBE_HANDLE       = '@StPetersHornsby'
+EXCLUDE_PLAYLIST_ID  = 'PLHaDvAO4RKLLgYFLSYeFAaAwpNDURh-ml'  # audiogram/RSS uploads
 
 def iso8601_to_seconds(d):
     m = re.match(r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?', d or '')
@@ -34,30 +24,50 @@ def duration_str_to_seconds(d):
         return parts[0]
     except: return 0
 
+def api_get(url):
+    with urllib.request.urlopen(url, timeout=10) as r:
+        return json.loads(r.read())
+
 def resolve_channel_id(api_key):
     url = ('https://www.googleapis.com/youtube/v3/search'
            '?part=snippet&type=channel&q=' + urllib.parse.quote(YOUTUBE_HANDLE) +
            '&maxResults=1&key=' + api_key)
     try:
-        with urllib.request.urlopen(url, timeout=10) as r:
-            data = json.loads(r.read())
-        items = data.get('items', [])
+        items = api_get(url).get('items', [])
         if items:
             return items[0]['snippet']['channelId']
     except Exception as e:
         print(f'  Warning: could not resolve channel ID: {e}')
     return None
 
-def is_audiogram(video):
-    """Return True if this video is an Anchor/Spotify audiogram upload."""
-    desc = video['snippet'].get('description', '').lower()
-    for marker in AUDIOGRAM_MARKERS:
-        if marker in desc:
-            return True
-    return False
+def get_excluded_video_ids(api_key, playlist_id):
+    """Fetch all video IDs from the exclusion playlist (handles pagination)."""
+    excluded = set()
+    page_token = ''
+    while True:
+        params = urllib.parse.urlencode({
+            'part': 'contentDetails',
+            'playlistId': playlist_id,
+            'maxResults': 50,
+            'key': api_key,
+            **({'pageToken': page_token} if page_token else {}),
+        })
+        try:
+            data = api_get('https://www.googleapis.com/youtube/v3/playlistItems?' + params)
+        except Exception as e:
+            print(f'  Warning: could not fetch exclusion playlist: {e}')
+            break
+        for item in data.get('items', []):
+            vid_id = item['contentDetails'].get('videoId')
+            if vid_id:
+                excluded.add(vid_id)
+        page_token = data.get('nextPageToken', '')
+        if not page_token:
+            break
+    return excluded
 
-def search_youtube(api_key, channel_id, query, podcast_secs):
-    """Search channel for a real sermon video, skipping audiograms."""
+def search_youtube(api_key, channel_id, query, excluded_ids):
+    """Search channel for a real sermon video, skipping any in the exclusion playlist."""
     params = urllib.parse.urlencode({
         'part': 'snippet',
         'channelId': channel_id,
@@ -67,8 +77,7 @@ def search_youtube(api_key, channel_id, query, podcast_secs):
         'key': api_key,
     })
     try:
-        with urllib.request.urlopen('https://www.googleapis.com/youtube/v3/search?' + params, timeout=10) as r:
-            candidates = json.loads(r.read()).get('items', [])
+        candidates = api_get('https://www.googleapis.com/youtube/v3/search?' + params).get('items', [])
     except Exception as e:
         print(f'    Search error: {e}')
         return '', ''
@@ -76,7 +85,6 @@ def search_youtube(api_key, channel_id, query, podcast_secs):
     if not candidates:
         return '', ''
 
-    # Fetch full details so we can read the description and duration
     vid_ids = ','.join(i['id']['videoId'] for i in candidates)
     detail_params = urllib.parse.urlencode({
         'part': 'snippet,contentDetails',
@@ -84,8 +92,7 @@ def search_youtube(api_key, channel_id, query, podcast_secs):
         'key': api_key,
     })
     try:
-        with urllib.request.urlopen('https://www.googleapis.com/youtube/v3/videos?' + detail_params, timeout=10) as r:
-            videos = json.loads(r.read()).get('items', [])
+        videos = api_get('https://www.googleapis.com/youtube/v3/videos?' + detail_params).get('items', [])
     except Exception as e:
         print(f'    Detail fetch error: {e}')
         return '', ''
@@ -95,9 +102,9 @@ def search_youtube(api_key, channel_id, query, podcast_secs):
         title    = video['snippet']['title']
         duration = iso8601_to_seconds(video['contentDetails']['duration'])
 
-        # Skip audiograms — they have Spotify/Anchor links in description
-        if is_audiogram(video):
-            print(f'    Skipping audiogram: "{title}"')
+        # Skip if in the excluded playlist
+        if vid_id in excluded_ids:
+            print(f'    Skipping (in excluded playlist): "{title}"')
             continue
 
         # Skip anything under 5 minutes
@@ -105,7 +112,7 @@ def search_youtube(api_key, channel_id, query, podcast_secs):
             print(f'    Skipping short video: "{title}" ({duration}s)')
             continue
 
-        print(f'    Matched real video: "{title}" ({duration}s)')
+        print(f'    Matched: "{title}" ({duration}s)')
         return f'https://www.youtube.com/watch?v={vid_id}', vid_id
 
     return '', ''
@@ -125,12 +132,20 @@ itunes_ch_img = channel_el.find('itunes:image', NS)
 if itunes_ch_img is not None:
     channel_image = itunes_ch_img.get('href', channel_image)
 
-# ── Resolve YouTube channel ───────────────────────────────────────────────
+# ── Setup YouTube ─────────────────────────────────────────────────────────
 yt_channel_id = None
+excluded_ids  = set()
+
 if YOUTUBE_API_KEY:
-    print(f'Resolving YouTube channel ID for {YOUTUBE_HANDLE}...')
+    print(f'Resolving YouTube channel for {YOUTUBE_HANDLE}...')
     yt_channel_id = resolve_channel_id(YOUTUBE_API_KEY)
-    print(f'  Channel ID: {yt_channel_id}' if yt_channel_id else '  Could not resolve — YouTube skipped')
+    if yt_channel_id:
+        print(f'  Channel ID: {yt_channel_id}')
+        print(f'Fetching exclusion playlist ({EXCLUDE_PLAYLIST_ID})...')
+        excluded_ids = get_excluded_video_ids(YOUTUBE_API_KEY, EXCLUDE_PLAYLIST_ID)
+        print(f'  {len(excluded_ids)} videos will be excluded')
+    else:
+        print('  Could not resolve channel — YouTube skipped')
 else:
     print('No YOUTUBE_API_KEY — skipping YouTube search')
 
@@ -141,10 +156,12 @@ try:
         old = json.load(f)
     for item in old.get('items', []):
         if item.get('videoId'):
-            cached_videos[item['title']] = {
-                'videoUrl': item.get('videoUrl', ''),
-                'videoId':  item.get('videoId', ''),
-            }
+            # Only keep cache entry if it's not in the exclusion playlist
+            if item['videoId'] not in excluded_ids:
+                cached_videos[item['title']] = {
+                    'videoUrl': item.get('videoUrl', ''),
+                    'videoId':  item.get('videoId', ''),
+                }
     print(f'Loaded {len(cached_videos)} cached video matches')
 except Exception:
     pass
@@ -179,8 +196,7 @@ for idx, item in enumerate(channel_el.findall('item')):
     elif yt_channel_id and YOUTUBE_API_KEY:
         print(f'Searching YouTube: "{title}"')
         video_url, video_id = search_youtube(
-            YOUTUBE_API_KEY, yt_channel_id, title,
-            duration_str_to_seconds(duration)
+            YOUTUBE_API_KEY, yt_channel_id, title, excluded_ids
         )
 
     items.append({
