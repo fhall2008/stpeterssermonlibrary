@@ -482,8 +482,9 @@ function parseRssXml(xml) {
     var summary = (item.getElementsByTagNameNS(ns,'summary')[0]||{}).textContent || '';
     var meta = xMeta([title,desc,summary].join(' '));
     var series = titleSeries || meta.series;
+    var book = meta.book || findBook(series) || findBook(title);
     rssSermons.push({ id:'rss_'+idx, title:title, speaker:author||meta.speaker||'Unknown',
-      book:meta.book, series:series, service:meta.service, topic:meta.topic,
+      book:book, series:series, service:meta.service, topic:meta.topic,
       date: pub ? new Date(pub).toISOString().split('T')[0] : '',
       desc:(summary||desc).replace(/<[^>]+>/g,'').trim(),
       audioUrl: enc ? enc.getAttribute('url') : '' });
@@ -645,6 +646,14 @@ function clearAll() {
 
 /* Helpers */
 function gT(el, tag) { var n = el.querySelector(tag); return n ? n.textContent.trim() : ''; }
+function findBook(text) {
+  if (!text) return '';
+  for (var i = 0; i < BIBLE_BOOKS.length; i++) {
+    if (new RegExp('\b' + BIBLE_BOOKS[i].replace(/\s/g,'\s') + '\b','i').test(text)) return BIBLE_BOOKS[i];
+  }
+  return '';
+}
+
 function xMeta(text) {
   var c = text.replace(/<[^>]+>/g,' ');
   var book='';
