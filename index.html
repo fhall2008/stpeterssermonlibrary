@@ -79,6 +79,8 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
 .empty-state h3{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;margin-bottom:0.5rem}
 .empty-state p{font-size:14px;color:var(--ink-muted)}
 .error-box{background:#FEF3F3;border:1px solid #F5CACA;border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem;font-size:14px;color:#8B2020;line-height:1.6}
+.sermon-art{width:72px;height:72px;border-radius:var(--radius);object-fit:cover;flex-shrink:0;background:var(--parchment-dark)}
+.sermon-card-inner{display:flex;gap:1rem;align-items:flex-start;flex:1;min-width:0}
 .audio-player{display:none;margin-top:1rem;background:var(--parchment-dark);border-radius:var(--radius);padding:0.75rem 1rem;border:1px solid var(--border)}
 .audio-player audio{width:100%;height:36px;display:block;accent-color:var(--gold)}
 .pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:2rem;flex-wrap:wrap}
@@ -219,7 +221,7 @@ async function loadFeed() {
     var res = await fetch(FEED_JSON + '?t=' + Date.now());
     if (!res.ok) throw new Error('HTTP ' + res.status);
     var data = await res.json();
-    parseAndRender(data.items);
+    parseAndRender(data.items, data.channelImage);
     setStatus('Updated ' + fmtUpdated(data.updated), true);
   } catch(e) {
     setStatus('Load failed', false);
@@ -291,7 +293,10 @@ function extractMeta(text) {
   };
 }
 
-function parseAndRender(items) {
+var channelImage = '';
+
+function parseAndRender(items, feedChannelImage) {
+  if (feedChannelImage) channelImage = feedChannelImage;
   var sermons = [];
   items.forEach(function(item) {
     var title = item.title || '';
@@ -306,7 +311,8 @@ function parseAndRender(items) {
       pubDate: item.pubDate, parsedDate: item.pubDate ? new Date(item.pubDate) : new Date(0),
       audioUrl: item.audioUrl || '', link: item.link || '', duration: item.duration || '',
       speaker: item.speaker || meta.speaker || 'Unknown',
-      book: book, series: series, service: meta.service, topic: meta.topic
+      book: book, series: series, service: meta.service, topic: meta.topic,
+      image: item.image || ''
     });
   });
 
@@ -440,7 +446,10 @@ function card(s, first) {
   var dur  = fmtDur(s.duration);
   var hasAudio = !!s.audioUrl;
   var playIcon = '<svg viewBox="0 0 16 16"><path d="M3 2.5l10 5.5-10 5.5V2.5z"/></svg>';
+  var img = s.image || channelImage;
   return '<div class="sermon-card' + (first ? ' first-card' : '') + '" id="card-' + s.id + '">' +
+    '<div class="sermon-card-inner">' +
+    (img ? '<img class="sermon-art" src="' + esc(img) + '" alt="" loading="lazy">' : '') +
     '<div style="flex:1;min-width:0">' +
       (tags ? '<div class="meta-top">' + tags + '</div>' : '') +
       '<div class="sermon-title">' + esc(s.title) + '</div>' +
@@ -451,6 +460,7 @@ function card(s, first) {
       '</div>' +
       (s.desc ? '<div class="sermon-desc">' + esc(s.desc) + '</div>' : '') +
       (hasAudio ? '<div class="audio-player" id="player-' + s.id + '"><audio controls preload="none" src="' + esc(s.audioUrl) + '"></audio></div>' : '') +
+    '</div>' +
     '</div>' +
     '<div class="sermon-actions">' +
       '<div class="sermon-date">' + date + '</div>' +
