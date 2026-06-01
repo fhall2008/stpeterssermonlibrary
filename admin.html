@@ -165,7 +165,7 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
            onkeydown="if(event.key==='Enter')doLogin()">
     <button class="btn-primary" onclick="doLogin()">Sign in</button>
     <div class="login-err" id="login-err">Incorrect password. Please try again.</div>
-    <p class="login-hint">Default password: <strong>stpeters2024</strong><br>Password is hashed with SHA-256.</p>
+    <p class="login-hint">Default password: <strong>stpeters2024</strong><br>Password is hashed with SHA-256.<br><a href="?reset" style="color:var(--gold)">Reset to default password</a></p>
   </div>
 </div>
 
@@ -310,6 +310,12 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
 <div class="toast" id="toast"></div>
 
 <script>
+// If URL contains ?reset, clear stored password hash so DEFAULT_HASH takes effect
+if (window.location.search.indexOf('reset') > -1) {
+  localStorage.removeItem('sph_admin_pw_hash');
+  window.history.replaceState({}, '', window.location.pathname);
+}
+
 var HASH_KEY = 'sph_admin_pw_hash';
 var OV_KEY   = 'sph_sermon_overrides';
 // SHA-256 of 'stpeters2024'
