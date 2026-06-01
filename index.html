@@ -531,7 +531,7 @@ function card(s, first) {
     '<div class="sermon-side">' +
       '<div class="sermon-date">' + date + '</div>' +
       (hasAudio
-        ? '<button class="btn-listen" onclick="togglePlayer(' + s.id + ',this)">' + playIcon + 'Listen</button>'
+        ? '<button class="btn-listen" id="btn-' + s.id + '" onclick="togglePlayer(\'' + s.id + '\',this)">' + playIcon + 'Listen</button>'
         : '<a href="' + esc(s.link || '#') + '" target="_blank" rel="noopener" class="btn-listen">' + playIcon + 'Listen</a>') +
       (s.videoId
         ? '<button class="btn-listen btn-watch" onclick="toggleVideo(\'' + s.videoId + '\',' + s.id + ',this)">' + watchIcon + 'Watch</button>'
@@ -544,22 +544,28 @@ function togglePlayer(id, btn) {
   var player = document.getElementById('player-' + id);
   if (!player) return;
   var isOpen = player.style.display === 'block';
+  var playIcon = '<svg viewBox="0 0 16 16"><path d="M3 2.5l10 5.5-10 5.5V2.5z"/></svg>';
+  var pauseIcon = '<svg viewBox="0 0 16 16"><rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/></svg>';
+  // Close all other open players first
   document.querySelectorAll('.audio-player').forEach(function(p) {
-    if (p !== player) {
+    if (p !== player && p.style.display === 'block') {
       p.style.display = 'none';
       var a = p.querySelector('audio'); if (a) a.pause();
-      var b = p.closest('.sermon-card').querySelector('.btn-listen');
-      if (b) b.innerHTML = '<svg viewBox="0 0 16 16"><path d="M3 2.5l10 5.5-10 5.5V2.5z"/></svg>Listen';
+      // Find the matching listen button by player id
+      var pid = p.id.replace('player-', '');
+      var ob = document.getElementById('btn-' + pid);
+      if (ob) ob.innerHTML = playIcon + 'Listen';
     }
   });
   if (isOpen) {
     player.style.display = 'none';
-    player.querySelector('audio').pause();
-    btn.innerHTML = '<svg viewBox="0 0 16 16"><path d="M3 2.5l10 5.5-10 5.5V2.5z"/></svg>Listen';
+    var a = player.querySelector('audio'); if (a) a.pause();
+    btn.innerHTML = playIcon + 'Listen';
   } else {
     player.style.display = 'block';
-    player.querySelector('audio').play();
-    btn.innerHTML = '<svg viewBox="0 0 16 16"><rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/></svg>Pause';
+    var a = player.querySelector('audio');
+    if (a) { var p = a.play(); if (p && p.catch) p.catch(function(){}); }
+    btn.innerHTML = pauseIcon + 'Pause';
   }
 }
 
