@@ -3,114 +3,142 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>St. Peter's Hornsby — Sermon Library</title>
+<title>Sermons — St Peter's Anglican Church Hornsby</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
 <style>
 :root {
-  --gold:#B8965A;--gold-light:#D4B07A;--ink:#1C1916;--ink-mid:#3D3830;--ink-muted:#7A7060;
-  --parchment:#FAF6EE;--parchment-dark:#F0E9D8;--white:#FFFFFF;
-  --border:rgba(184,150,90,0.25);--border-strong:rgba(184,150,90,0.5);
-  --teal:#1D6B6B;--radius:4px;--radius-lg:8px;
+  --bg:#ffffff;--bg2:#f8f8f6;--bg3:#f2f1ee;
+  --text:#0f0f0e;--text2:#5a5955;--text3:#9a9895;
+  --border:#e8e7e3;--border2:#d4d3ce;
+  --accent:#1a1a18;--accent2:#2d2d2a;
+  --blue:#1d4ed8;--blue-bg:#eff6ff;--blue-text:#1e40af;
+  --green:#15803d;--green-bg:#f0fdf4;--green-text:#166534;
+  --amber:#b45309;--amber-bg:#fffbeb;--amber-text:#92400e;
+  --red:#b91c1c;--red-bg:#fef2f2;
+  --radius:8px;--radius-lg:12px;--radius-xl:16px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--parchment);color:var(--ink);min-height:100vh}
-header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;position:sticky;top:0;z-index:100}
-.header-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:68px;gap:1rem}
-.logo{display:flex;align-items:center;gap:14px}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg2);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
 
-.logo-text h1{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:#fff;letter-spacing:0.02em;line-height:1.1}
-.logo-text span{font-size:11px;font-weight:300;color:var(--gold-light);letter-spacing:0.12em;text-transform:uppercase}
-.header-right{display:flex;align-items:center;gap:10px}
-.admin-link{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);text-decoration:none;padding:4px 10px;border:1px solid rgba(255,255,255,0.1);border-radius:3px;transition:all 0.2s}
-.admin-link:hover{color:var(--gold-light);border-color:var(--gold)}
-.lang-tabs{display:flex;gap:2px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:var(--radius);padding:3px}
-.lang-tab{padding:6px 18px;font-size:13px;color:rgba(255,255,255,0.55);cursor:pointer;border-radius:3px;border:none;background:none;font-family:'DM Sans',sans-serif;transition:all 0.2s}
-.lang-tab.active{background:var(--gold);color:var(--ink);font-weight:500}
+/* Nav */
+nav{background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.nav-logo img{height:36px;width:auto;display:block}
+.nav-right{display:flex;align-items:center;gap:8px}
+.admin-link{font-size:12px;color:var(--text3);text-decoration:none;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius);transition:all 0.15s}
+.admin-link:hover{color:var(--text);border-color:var(--border2)}
+.lang-tabs{display:flex;background:var(--bg3);border-radius:var(--radius);padding:3px;gap:2px}
+.lang-tab{padding:5px 14px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text2);border:none;background:none;border-radius:6px;cursor:pointer;transition:all 0.15s;font-weight:400}
+.lang-tab.active{background:var(--bg);color:var(--text);font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
 .lang-tab.soon{opacity:0.4;cursor:not-allowed}
-.stats-bar{background:var(--parchment-dark);border-bottom:1px solid var(--border);padding:0.85rem 2rem}
-.stats-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:2rem;flex-wrap:wrap}
-.stat{font-size:13px;color:var(--ink-muted)}.stat strong{color:var(--ink);font-weight:500}
-.stat-div{width:1px;height:14px;background:var(--border-strong)}
-#feed-status{font-size:13px;color:var(--gold);margin-left:auto;display:flex;align-items:center;gap:6px}
-.spinner{width:12px;height:12px;border:1.5px solid var(--gold-light);border-top-color:transparent;border-radius:50%;animation:spin 0.8s linear infinite}
+
+/* Stats bar */
+.stats-bar{background:var(--bg);border-bottom:1px solid var(--border);padding:0 2rem}
+.stats-inner{max-width:1280px;margin:0 auto;height:44px;display:flex;align-items:center;gap:1.5rem}
+.stat{font-size:13px;color:var(--text2)}.stat strong{color:var(--text);font-weight:500}
+.stat-div{width:1px;height:12px;background:var(--border)}
+#feed-status{font-size:12px;color:var(--text3);margin-left:auto;display:flex;align-items:center;gap:6px}
+.spinner{width:11px;height:11px;border:1.5px solid var(--border2);border-top-color:var(--text3);border-radius:50%;animation:spin 0.8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.main-layout{max-width:1280px;margin:0 auto;padding:2rem;display:grid;grid-template-columns:260px 1fr;gap:2rem;align-items:start}
-.sidebar{position:sticky;top:88px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
-.sidebar-head{background:var(--ink);padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between}
-.sidebar-head span{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gold-light)}
-#clear-btn{font-size:11px;color:rgba(255,255,255,0.4);background:none;border:none;cursor:pointer;font-family:inherit;transition:color 0.2s}
-#clear-btn:hover{color:var(--gold-light)}
-.search-wrap{padding:1rem 1.25rem;border-bottom:1px solid var(--border)}
-#search-input{width:100%;padding:8px 10px 8px 30px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--parchment) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%237A7060' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 9px center;border:1px solid var(--border-strong);border-radius:var(--radius)}
-#search-input:focus{outline:none;border-color:var(--gold)}
-#search-input::placeholder{color:var(--ink-muted)}
-.filter-group{border-bottom:1px solid var(--border);padding:1rem 1.25rem}
+
+/* Layout */
+.layout{max-width:1280px;margin:0 auto;padding:2rem;display:grid;grid-template-columns:256px 1fr;gap:1.5rem;align-items:start}
+
+/* Sidebar */
+.sidebar{position:sticky;top:72px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.sidebar-head{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sidebar-head span{font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3)}
+#clear-btn{font-size:12px;color:var(--blue);background:none;border:none;cursor:pointer;font-family:inherit;padding:0}
+#clear-btn:hover{text-decoration:underline}
+.search-wrap{padding:0.875rem 1rem;border-bottom:1px solid var(--border)}
+.search-wrap input{width:100%;padding:7px 10px 7px 32px;font-size:13px;font-family:'Inter',sans-serif;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239a9895' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 10px center;color:var(--text);outline:none;transition:border 0.15s}
+.search-wrap input:focus{border-color:var(--accent);background:var(--bg)}
+.search-wrap input::placeholder{color:var(--text3)}
+.filter-group{border-bottom:1px solid var(--border);padding:0.875rem 1rem}
 .filter-group:last-child{border-bottom:none}
-.filter-label{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-muted);font-weight:500;margin-bottom:0.6rem}
-.filter-group select{width:100%;padding:7px 28px 7px 10px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--parchment) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237A7060' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 10px center;border:1px solid var(--border-strong);border-radius:var(--radius);appearance:none;cursor:pointer}
-.filter-group select:focus{outline:none;border-color:var(--gold)}
-.content-area{min-width:0}
-.results-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.5rem}
-.results-count{font-size:13px;color:var(--ink-muted)}.results-count strong{color:var(--ink);font-weight:500}
-.sort-wrap{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-muted)}
-.sort-wrap select{padding:5px 28px 5px 8px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237A7060' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 8px center;border:1px solid var(--border-strong);border-radius:var(--radius);appearance:none;cursor:pointer}
-.sermon-grid{display:flex;flex-direction:column;gap:1px;border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;background:var(--border)}
-.sermon-card{background:var(--white);padding:1.25rem 1.5rem;display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:start;transition:background 0.15s}
-.sermon-card:hover{background:#FDFAF4}
-.sermon-card.first-card{border-top:3px solid var(--gold)}
-.meta-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:0.5rem}
-.tag{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap}
-.tag-series{background:#EEE8D8;color:#6B5A2C;border:1px solid rgba(107,90,44,0.25)}
-.tag-service{background:#E8EEF5;color:#2C4A6B;border:1px solid rgba(44,74,107,0.25)}
-.tag-book{background:#E8F5EE;color:#1D5B3A;border:1px solid rgba(29,91,58,0.25)}
-.sermon-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--ink);line-height:1.25;margin-bottom:0.35rem}
-.sermon-info{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--ink-muted)}
-.speaker{color:var(--gold);font-weight:500}
-.dot{width:3px;height:3px;background:var(--border-strong);border-radius:50%;flex-shrink:0}
-.sermon-desc{font-size:13px;color:var(--ink-muted);line-height:1.6;margin-top:0.6rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.sermon-actions{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}
-.sermon-date{font-size:12px;color:var(--ink-muted);white-space:nowrap}
-.btn-listen{display:flex;align-items:center;gap:6px;padding:7px 14px;background:var(--ink);color:var(--gold-light);font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;border:none;border-radius:var(--radius);cursor:pointer;text-decoration:none;letter-spacing:0.04em;transition:background 0.15s;white-space:nowrap}
-.btn-listen:hover{background:var(--ink-mid)}
-.btn-listen svg{width:12px;height:12px;fill:var(--gold-light);flex-shrink:0}
-.empty-state{text-align:center;padding:4rem 2rem;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg)}
-.empty-state h3{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;margin-bottom:0.5rem}
-.empty-state p{font-size:14px;color:var(--ink-muted)}
-.error-box{background:#FEF3F3;border:1px solid #F5CACA;border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem;font-size:14px;color:#8B2020;line-height:1.6}
-.sermon-art{width:72px;height:72px;border-radius:var(--radius);object-fit:cover;flex-shrink:0;background:var(--parchment-dark)}
-.video-player{display:none;margin-top:1rem;border-radius:var(--radius);overflow:hidden;background:#000;aspect-ratio:16/9}
+.filter-label{font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.filter-group select{width:100%;padding:7px 28px 7px 10px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);background:var(--bg2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239a9895' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 9px center;border:1px solid var(--border);border-radius:var(--radius);appearance:none;cursor:pointer;outline:none;transition:border 0.15s}
+.filter-group select:focus{border-color:var(--accent);background:var(--bg)}
+
+/* Content */
+.content{min-width:0}
+.results-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px}
+.results-count{font-size:13px;color:var(--text2)}.results-count strong{color:var(--text);font-weight:500}
+.sort-wrap{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2)}
+.sort-wrap select{padding:5px 26px 5px 9px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239a9895' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 8px center;border:1px solid var(--border);border-radius:var(--radius);appearance:none;cursor:pointer;outline:none}
+
+/* Sermon cards */
+.sermon-grid{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.sermon-card{background:var(--bg);padding:1.25rem 1.5rem;display:flex;gap:1rem;align-items:flex-start;transition:background 0.1s}
+.sermon-card:hover{background:#fafaf8}
+.sermon-card.latest{border-top:2px solid var(--accent)}
+.sermon-art{width:64px;height:64px;border-radius:var(--radius);object-fit:cover;flex-shrink:0;background:var(--bg3)}
+.sermon-body{flex:1;min-width:0}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px}
+.tag{font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px;white-space:nowrap;letter-spacing:0.02em}
+.tag-series{background:#f0f0ee;color:#444;border:1px solid #e0e0dc}
+.tag-service{background:var(--blue-bg);color:var(--blue-text);border:1px solid #dbeafe}
+.tag-book{background:var(--green-bg);color:var(--green-text);border:1px solid #dcfce7}
+.sermon-title{font-family:'Fraunces',Georgia,serif;font-size:17px;font-weight:400;color:var(--text);line-height:1.3;margin-bottom:4px}
+.sermon-meta{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2);flex-wrap:wrap}
+.sermon-meta .speaker{font-weight:500;color:var(--text)}
+.dot{width:3px;height:3px;border-radius:50%;background:var(--border2);flex-shrink:0}
+.sermon-desc{font-size:13px;color:var(--text2);margin-top:6px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.audio-player{display:none;margin-top:10px;background:var(--bg3);border-radius:var(--radius);padding:10px 12px;border:1px solid var(--border)}
+.audio-player audio{width:100%;height:32px;display:block;accent-color:var(--accent)}
+.video-player{display:none;margin-top:10px;border-radius:var(--radius);overflow:hidden;background:#000;aspect-ratio:16/9}
 .video-player iframe{width:100%;height:100%;display:block;border:none}
-.sermon-art{width:72px;height:72px;border-radius:var(--radius);object-fit:cover;flex-shrink:0;background:var(--parchment-dark)}
-.sermon-card-inner{display:flex;gap:1rem;align-items:flex-start;flex:1;min-width:0}
-.audio-player{display:none;margin-top:1rem;background:var(--parchment-dark);border-radius:var(--radius);padding:0.75rem 1rem;border:1px solid var(--border)}
-.audio-player audio{width:100%;height:36px;display:block;accent-color:var(--gold)}
-.pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:2rem;flex-wrap:wrap}
-.page-btn{padding:6px 12px;font-size:13px;font-family:'DM Sans',sans-serif;background:var(--white);border:1px solid var(--border-strong);border-radius:var(--radius);cursor:pointer;color:var(--ink-muted);transition:all 0.15s;min-width:34px;text-align:center}
-.page-btn:hover{border-color:var(--gold);color:var(--ink)}
-.page-btn.active{background:var(--ink);color:var(--gold-light);border-color:var(--ink)}
+.sermon-side{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0;min-width:80px}
+.sermon-date{font-size:12px;color:var(--text3);white-space:nowrap}
+.btn-listen{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;background:var(--accent);color:#fff;font-size:12px;font-weight:500;font-family:'Inter',sans-serif;border:none;border-radius:var(--radius);cursor:pointer;text-decoration:none;transition:background 0.15s;white-space:nowrap}
+.btn-listen:hover{background:var(--accent2)}
+.btn-listen svg{width:11px;height:11px;fill:#fff;flex-shrink:0}
+.btn-watch{background:#1a1a1a!important}
+.btn-watch:hover{background:#333!important}
+
+/* Empty / Error */
+.empty-state{text-align:center;padding:4rem 2rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg)}
+.empty-state h3{font-family:'Fraunces',serif;font-size:22px;font-weight:300;margin-bottom:6px;color:var(--text)}
+.empty-state p{font-size:14px;color:var(--text2)}
+.error-box{background:var(--red-bg);border:1px solid #fecaca;border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem;font-size:14px;color:var(--red);line-height:1.6}
+.manual-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-top:0.75rem}
+.manual-box p{font-size:13px;color:var(--text2);margin-bottom:0.75rem;line-height:1.6}
+.manual-box textarea{width:100%;height:80px;padding:8px;font-family:monospace;font-size:12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg2);color:var(--text);resize:vertical;display:block;outline:none}
+.manual-box textarea:focus{border-color:var(--accent)}
+.manual-box button{margin-top:8px;padding:7px 16px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-family:'Inter',sans-serif;font-size:13px;cursor:pointer}
+
+/* Pagination */
+.pagination{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:1.5rem;flex-wrap:wrap}
+.page-btn{padding:6px 12px;font-size:13px;font-family:'Inter',sans-serif;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;color:var(--text2);transition:all 0.15s;min-width:34px;text-align:center}
+.page-btn:hover{border-color:var(--border2);color:var(--text)}
+.page-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 .page-btn:disabled{opacity:0.35;cursor:not-allowed}
-.farsi-box{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:4rem 2rem;text-align:center}
-.farsi-box h3{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:500;margin-bottom:0.5rem}
-.farsi-box p{font-size:15px;color:var(--ink-muted);max-width:400px;margin:0 auto;line-height:1.6}
-footer{background:var(--ink);border-top:2px solid var(--gold);padding:2rem;text-align:center;margin-top:4rem}
-footer p{font-size:12px;color:rgba(255,255,255,0.3);letter-spacing:0.06em}
-footer .fn{color:var(--gold-light);font-weight:500}
-@media(max-width:600px){.sermon-card{grid-template-columns:1fr}.sermon-actions{flex-direction:row;align-items:center}}
+
+/* Farsi placeholder */
+.farsi-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:4rem 2rem;text-align:center}
+.farsi-box h3{font-family:'Fraunces',serif;font-size:26px;font-weight:300;margin-bottom:6px}
+.farsi-box p{font-size:15px;color:var(--text2);max-width:380px;margin:0 auto;line-height:1.6}
+
+/* Footer */
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;margin-top:3rem;background:var(--bg)}
+footer p{font-size:12px;color:var(--text3)}
+footer img{height:24px;width:auto;vertical-align:middle;opacity:0.45;margin-right:8px}
+
+@media(max-width:900px){.layout{grid-template-columns:1fr;padding:1rem}.sidebar{position:static}}
+@media(max-width:600px){.sermon-card{flex-wrap:wrap}.sermon-side{flex-direction:row;align-items:center;width:100%;min-width:0}}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="header-inner">
-    <div class="logo">
-      <img src="logo.png" alt="St Peter's Anglican Church Hornsby" style="height:48px;width:auto;display:block">
-      <div class="logo-text">
-        <span style="font-size:11px;font-weight:300;color:var(--gold-light);letter-spacing:0.14em;text-transform:uppercase">Sermon Library</span>
-      </div>
-    </div>
-    <div class="header-right">
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="logo.png" alt="St Peter's Anglican Church Hornsby">
+    </a>
+    <div class="nav-right">
       <a href="admin.html" class="admin-link">Admin</a>
       <div class="lang-tabs">
         <button class="lang-tab active" onclick="setLang('en')" id="tab-en">English</button>
@@ -118,8 +146,7 @@ footer .fn{color:var(--gold-light);font-weight:500}
       </div>
     </div>
   </div>
-</header>
-
+</nav>
 
 <div class="stats-bar">
   <div class="stats-inner">
@@ -130,27 +157,27 @@ footer .fn{color:var(--gold-light);font-weight:500}
     <div class="stat"><strong id="series-count">—</strong> series</div>
     <div id="feed-status">
       <div class="spinner" id="spinner"></div>
-      <span id="status-text">Loading feed…</span>
+      <span id="status-text">Loading…</span>
     </div>
   </div>
 </div>
 
 <div id="view-en">
-  <div class="main-layout">
+  <div class="layout">
     <aside class="sidebar">
       <div class="sidebar-head">
-        <span>Filter Sermons</span>
+        <span>Filters</span>
         <button id="clear-btn" onclick="clearFilters()">Clear all</button>
       </div>
       <div class="search-wrap">
-        <input type="text" id="search-input" placeholder="Search titles, topics…" oninput="applyFilters()">
+        <input type="text" id="search-input" placeholder="Search sermons…" oninput="applyFilters()">
       </div>
       <div class="filter-group">
         <div class="filter-label">Speaker</div>
         <select id="filter-speaker" onchange="applyFilters()"><option value="">All speakers</option></select>
       </div>
       <div class="filter-group">
-        <div class="filter-label">Book of the Bible</div>
+        <div class="filter-label">Book</div>
         <select id="filter-book" onchange="applyFilters()"><option value="">All books</option></select>
       </div>
       <div class="filter-group">
@@ -167,11 +194,11 @@ footer .fn{color:var(--gold-light);font-weight:500}
       </div>
     </aside>
 
-    <div class="content-area">
+    <div class="content">
       <div class="results-bar">
         <div class="results-count" id="results-count">Loading…</div>
         <div class="sort-wrap">
-          Sort by
+          Sort:
           <select id="sort-select" onchange="applyFilters()">
             <option value="newest">Newest first</option>
             <option value="oldest">Oldest first</option>
@@ -188,17 +215,17 @@ footer .fn{color:var(--gold-light);font-weight:500}
 </div>
 
 <div id="view-fa" style="display:none">
-  <div style="max-width:800px;margin:3rem auto;padding:0 2rem">
+  <div style="max-width:700px;margin:3rem auto;padding:0 2rem">
     <div class="farsi-box">
-      <div style="font-size:40px;color:var(--gold);margin-bottom:1rem">&#10013;</div>
-      <h3>Farsi Sermons — Coming Soon</h3>
+      <div style="font-size:36px;color:var(--text3);margin-bottom:1rem">✦</div>
+      <h3>Farsi sermons coming soon</h3>
       <p>We are working on adding our Farsi sermon archive. Please check back soon.</p>
     </div>
   </div>
 </div>
 
 <footer>
-  <p><img src="logo.png" alt="St Peter's Anglican Church Hornsby" style="height:32px;width:auto;vertical-align:middle;opacity:0.7;margin-right:10px">Sermon Library</p>
+  <p><img src="logo.png" alt="">St Peter's Anglican Church Hornsby &nbsp;·&nbsp; Sermon Library</p>
 </footer>
 
 <script>
@@ -210,7 +237,6 @@ var currentPage = 1;
 
 var BIBLE_BOOKS = ['Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth','1 Samuel','2 Samuel','1 Kings','2 Kings','1 Chronicles','2 Chronicles','Ezra','Nehemiah','Esther','Job','Psalms','Psalm','Proverbs','Ecclesiastes','Song of Solomon','Song of Songs','Isaiah','Jeremiah','Lamentations','Ezekiel','Daniel','Hosea','Joel','Amos','Obadiah','Jonah','Micah','Nahum','Habakkuk','Zephaniah','Haggai','Zechariah','Malachi','Matthew','Mark','Luke','John','Acts','Romans','1 Corinthians','2 Corinthians','Galatians','Ephesians','Philippians','Colossians','1 Thessalonians','2 Thessalonians','1 Timothy','2 Timothy','Titus','Philemon','Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation'];
 
-
 function setLang(lang) {
   document.getElementById('view-en').style.display = lang === 'en' ? '' : 'none';
   document.getElementById('view-fa').style.display = lang === 'fa' ? '' : 'none';
@@ -218,7 +244,7 @@ function setLang(lang) {
 }
 
 async function loadFeed() {
-  setStatus('Loading sermons…', false);
+  setStatus('Loading…', false);
   try {
     var res = await fetch(FEED_JSON + '?t=' + Date.now());
     if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -233,42 +259,13 @@ async function loadFeed() {
 
 function fmtUpdated(iso) {
   if (!iso) return '';
-  var d = new Date(iso);
-  return d.toLocaleDateString('en-AU', {day:'numeric',month:'short',year:'numeric'});
+  return new Date(iso).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});
 }
 
 function showError() {
-  setStatus('Could not load feed', false);
   document.getElementById('results-count').textContent = '';
   document.getElementById('error-area').innerHTML =
-    '<div class="error-box">' +
-      'Could not load the sermon feed automatically (all CORS proxies failed or timed out).' +
-      ' This is common with free proxy services.' +
-    '</div>' +
-    '<div class="manual-box">' +
-      '<p><strong>Manual load:</strong> Open the <a href="' + RSS_URL + '" target="_blank" style="color:var(--gold)">RSS feed link</a> in a new tab, select all the text (Ctrl+A / Cmd+A), copy it, then paste below.</p>' +
-      '<textarea id="paste-xml" placeholder="Paste RSS XML here…"></textarea>' +
-      '<button onclick="loadPasted()">Load sermons</button>' +
-    '</div>';
-}
-
-function loadPasted() {
-  var text = document.getElementById('paste-xml').value.trim();
-  if (!text) return;
-  var xml;
-  try {
-    xml = new DOMParser().parseFromString(text, 'text/xml');
-  } catch(e) {
-    alert('Could not parse XML: ' + e.message);
-    return;
-  }
-  if (xml.querySelector('parsererror')) {
-    alert('Invalid XML — make sure you copied the full RSS source.');
-    return;
-  }
-  document.getElementById('error-area').innerHTML = '';
-  parseAndRender(xml);
-  setStatus('Feed loaded (manual) \u2713', true);
+    '<div class="error-box">Could not load the sermon feed. The <code>feed.json</code> file may not exist yet — go to your GitHub repository → Actions → "Fetch Sermon Feed" → Run workflow.</div>';
 }
 
 function findBook(text) {
@@ -282,12 +279,10 @@ function findBook(text) {
 }
 
 function extractMeta(text) {
-  // Replace HTML tags with newlines to preserve line structure, then match Label: Value
   var c = text.replace(/<\/p>/gi, '\n').replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ');
   function field() {
     var keys = Array.prototype.slice.call(arguments);
     for (var k = 0; k < keys.length; k++) {
-      // Match "Key: Value" up to end of line only
       var re = new RegExp('^\\s*' + keys[k] + '\\s*:\\s*(.+)$', 'im');
       var m = c.match(re);
       if (m) return m[1].trim().replace(/\s+/g, ' ').replace(/[.,;]$/, '');
@@ -310,12 +305,9 @@ function parseAndRender(items, feedChannelImage) {
   items.forEach(function(item) {
     var title = item.title || '';
     var series = item.titleSeries || '';
-    // Use raw HTML description so structured fields (Speaker: / Series: / Service:) are extracted cleanly
     var meta = extractMeta(item.rawHtml || item.desc || '');
     if (!series) series = meta.series;
-    // Scan all fields for a Bible book - first match wins
     var book = findBook(title) || findBook(series) || findBook(item.desc) || findBook(item.speaker) || '';
-    // Speaker: prefer RSS itunes:author, fall back to description extraction
     var speaker = item.speaker || meta.speaker || 'Unknown';
     var service = meta.service;
     sermons.push({
@@ -331,7 +323,6 @@ function parseAndRender(items, feedChannelImage) {
     });
   });
 
-  // Merge admin overrides from localStorage
   var overrides = [];
   try { overrides = JSON.parse(localStorage.getItem('sph_sermon_overrides')) || []; } catch(e) {}
   var byRssId = {};
@@ -366,16 +357,13 @@ function parseAndRender(items, feedChannelImage) {
   document.getElementById('speaker-count').textContent = uniq(sermons.map(function(s){return s.speaker !== 'Unknown' ? s.speaker : '';})).length;
   document.getElementById('series-count').textContent = uniq(sermons.map(function(s){return s.series;})).length;
   applyFilters();
-  setStatus('Feed loaded \u2713', true);
+  setStatus('Updated ' + fmtUpdated(''), true);
 }
 
 var BIBLICAL_ORDER = ['Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth','1 Samuel','2 Samuel','1 Kings','2 Kings','1 Chronicles','2 Chronicles','Ezra','Nehemiah','Esther','Job','Psalms','Psalm','Proverbs','Ecclesiastes','Song of Solomon','Song of Songs','Isaiah','Jeremiah','Lamentations','Ezekiel','Daniel','Hosea','Joel','Amos','Obadiah','Jonah','Micah','Nahum','Habakkuk','Zephaniah','Haggai','Zechariah','Malachi','Matthew','Mark','Luke','John','Acts','Romans','1 Corinthians','2 Corinthians','Galatians','Ephesians','Philippians','Colossians','1 Thessalonians','2 Thessalonians','1 Timothy','2 Timothy','Titus','Philemon','Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation'];
 
 function uniq(arr) { return Array.from(new Set(arr.filter(Boolean))).sort(); }
-
-function countFor(field, val) {
-  return allSermons.filter(function(s){ return s[field] === val; }).length;
-}
+function countFor(field, val) { return allSermons.filter(function(s){ return s[field] === val; }).length; }
 
 function populateFilters() {
   var speakers = uniq(allSermons.map(function(s){return s.speaker !== 'Unknown' ? s.speaker : '';}));
@@ -461,15 +449,14 @@ function card(s, first) {
   var dur  = fmtDur(s.duration);
   var hasAudio = !!s.audioUrl;
   var playIcon  = '<svg viewBox="0 0 16 16"><path d="M3 2.5l10 5.5-10 5.5V2.5z"/></svg>';
-  var watchIcon = '<svg viewBox="0 0 20 14" style="fill:#fff;width:14px;height:10px"><path d="M19.5 2.2A2.5 2.5 0 0017.6.3C16.1 0 10 0 10 0S3.9 0 2.4.3A2.5 2.5 0 00.5 2.2 26 26 0 000 7a26 26 0 00.5 4.8 2.5 2.5 0 001.9 1.9C3.9 14 10 14 10 14s6.1 0 7.6-.3a2.5 2.5 0 001.9-1.9A26 26 0 0020 7a26 26 0 00-.5-4.8zM8 10V4l5 3-5 3z"/></svg>';
+  var watchIcon = '<svg viewBox="0 0 20 14" style="fill:#fff;width:13px;height:9px"><path d="M19.5 2.2A2.5 2.5 0 0017.6.3C16.1 0 10 0 10 0S3.9 0 2.4.3A2.5 2.5 0 00.5 2.2 26 26 0 000 7a26 26 0 00.5 4.8 2.5 2.5 0 001.9 1.9C3.9 14 10 14 10 14s6.1 0 7.6-.3a2.5 2.5 0 001.9-1.9A26 26 0 0020 7a26 26 0 00-.5-4.8zM8 10V4l5 3-5 3z"/></svg>';
   var img = s.image || channelImage;
-  return '<div class="sermon-card' + (first ? ' first-card' : '') + '" id="card-' + s.id + '">' +
-    '<div class="sermon-card-inner">' +
+  return '<div class="sermon-card' + (first ? ' latest' : '') + '" id="card-' + s.id + '">' +
     (img ? '<img class="sermon-art" src="' + esc(img) + '" alt="" loading="lazy">' : '') +
-    '<div style="flex:1;min-width:0">' +
-      (tags ? '<div class="meta-top">' + tags + '</div>' : '') +
+    '<div class="sermon-body">' +
+      (tags ? '<div class="tags">' + tags + '</div>' : '') +
       '<div class="sermon-title">' + esc(s.title) + '</div>' +
-      '<div class="sermon-info">' +
+      '<div class="sermon-meta">' +
         '<span class="speaker">' + esc(s.speaker) + '</span>' +
         (date ? '<span class="dot"></span><span>' + date + '</span>' : '') +
         (dur  ? '<span class="dot"></span><span>' + esc(dur) + '</span>' : '') +
@@ -478,14 +465,13 @@ function card(s, first) {
       (hasAudio ? '<div class="audio-player" id="player-' + s.id + '"><audio controls preload="none" src="' + esc(s.audioUrl) + '"></audio></div>' : '') +
       (s.videoId ? '<div class="video-player" id="video-' + s.id + '"></div>' : '') +
     '</div>' +
-    '</div>' +
-    '<div class="sermon-actions">' +
+    '<div class="sermon-side">' +
       '<div class="sermon-date">' + date + '</div>' +
       (hasAudio
         ? '<button class="btn-listen" onclick="togglePlayer(' + s.id + ',this)">' + playIcon + 'Listen</button>'
         : '<a href="' + esc(s.link || '#') + '" target="_blank" rel="noopener" class="btn-listen">' + playIcon + 'Listen</a>') +
       (s.videoId
-        ? '<button class="btn-listen btn-watch" onclick="toggleVideo(\'' + s.videoId + '\',' + s.id + ',this)" style="background:#8B2020">' + watchIcon + 'Watch</button>'
+        ? '<button class="btn-listen btn-watch" onclick="toggleVideo(\'' + s.videoId + '\',' + s.id + ',this)">' + watchIcon + 'Watch</button>'
         : '') +
     '</div>' +
   '</div>';
@@ -518,7 +504,6 @@ function toggleVideo(videoId, id, btn) {
   var vp = document.getElementById('video-' + id);
   if (!vp) return;
   var isOpen = vp.style.display === 'block';
-  // Close all open players
   document.querySelectorAll('.audio-player').forEach(function(p) {
     p.style.display = 'none';
     var a = p.querySelector('audio'); if (a) a.pause();
@@ -528,12 +513,12 @@ function toggleVideo(videoId, id, btn) {
   document.querySelectorAll('.video-player').forEach(function(v) {
     if (v !== vp) { v.style.display = 'none'; v.innerHTML = ''; }
     var b = v.closest('.sermon-card') && v.closest('.sermon-card').querySelector('.btn-watch');
-    if (b) b.innerHTML = '<svg viewBox="0 0 16 16" style="fill:#fff"><path d="M6 3.5l7 4.5-7 4.5V3.5z"/><rect x="1" y="2" width="2.5" height="12" rx="1"/></svg>Watch';
+    if (b) b.innerHTML = '<svg viewBox="0 0 16 16" style="fill:#fff"><path d="M6 3.5l7 4.5-7 4.5V3.5z"/></svg>Watch';
   });
   if (isOpen) {
     vp.style.display = 'none';
     vp.innerHTML = '';
-    btn.innerHTML = '<svg viewBox="0 0 16 16" style="fill:#fff"><path d="M6 3.5l7 4.5-7 4.5V3.5z"/><rect x="1" y="2" width="2.5" height="12" rx="1"/></svg>Watch';
+    btn.innerHTML = '<svg viewBox="0 0 20 14" style="fill:#fff;width:13px;height:9px"><path d="M19.5 2.2A2.5 2.5 0 0017.6.3C16.1 0 10 0 10 0S3.9 0 2.4.3A2.5 2.5 0 00.5 2.2 26 26 0 000 7a26 26 0 00.5 4.8 2.5 2.5 0 001.9 1.9C3.9 14 10 14 10 14s6.1 0 7.6-.3a2.5 2.5 0 001.9-1.9A26 26 0 0020 7a26 26 0 00-.5-4.8zM8 10V4l5 3-5 3z"/></svg>Watch';
   } else {
     vp.style.display = 'block';
     vp.innerHTML = '<iframe src="https://www.youtube.com/embed/' + videoId + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
@@ -564,7 +549,7 @@ function renderPag(pages) {
   var h = '<button class="page-btn" onclick="goPage(' + (currentPage-1) + ')"' + (currentPage===1?' disabled':'') + '>&lsaquo; Prev</button>';
   for (var i = 1; i <= pages; i++) {
     if (pages > 7 && i > 2 && i < pages-1 && Math.abs(i-currentPage) > 1) {
-      if (i===3 || i===pages-2) h += '<span style="padding:6px 4px;color:var(--ink-muted)">…</span>';
+      if (i===3 || i===pages-2) h += '<span style="padding:6px 4px;color:var(--text3)">…</span>';
       continue;
     }
     h += '<button class="page-btn' + (i===currentPage?' active':'') + '" onclick="goPage(' + i + ')">' + i + '</button>';
@@ -584,8 +569,7 @@ function goPage(n) {
 function setStatus(msg, ok) {
   document.getElementById('status-text').textContent = msg;
   document.getElementById('spinner').style.display = ok ? 'none' : '';
-  if (ok) document.getElementById('feed-status').style.color = 'var(--teal)';
-  else document.getElementById('feed-status').style.color = 'var(--gold)';
+  document.getElementById('feed-status').style.color = ok ? '#9a9895' : '#9a9895';
 }
 
 loadFeed();
