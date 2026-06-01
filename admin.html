@@ -26,11 +26,9 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
 .logo-text h1{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:#fff;letter-spacing:0.02em;line-height:1.1}
 .logo-text span{font-size:11px;font-weight:300;color:var(--gold-light);letter-spacing:0.12em;text-transform:uppercase}
 .hdr-actions{display:flex;align-items:center;gap:10px}
-.btn-outline{padding:7px 16px;font-size:13px;font-family:'DM Sans',sans-serif;background:transparent;border:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.7);border-radius:var(--radius);cursor:pointer;text-decoration:none;transition:all 0.15s;display:inline-flex;align-items:center;gap:6px}
+.btn-outline{padding:7px 16px;font-size:13px;font-family:'DM Sans',sans-serif;background:transparent;border:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.7);border-radius:var(--radius);cursor:pointer;text-decoration:none;transition:all 0.15s;display:inline-flex;align-items:center}
 .btn-outline:hover{border-color:var(--gold);color:var(--gold-light)}
 .badge-admin{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;background:var(--gold);color:var(--ink);padding:3px 10px;border-radius:20px;font-weight:500}
-
-/* Login */
 #login-screen{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 68px);padding:2rem}
 .login-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.5rem;width:100%;max-width:360px;text-align:center}
 .login-card h2{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;margin-bottom:0.25rem}
@@ -41,19 +39,15 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
 .btn-primary:hover{background:var(--ink-mid)}
 .login-err{font-size:12px;color:var(--red);margin-top:8px;display:none}
 .login-hint{font-size:11px;color:var(--ink-muted);margin-top:1rem;line-height:1.5}
-
-/* Admin screen */
 #admin-screen{display:none;max-width:1200px;margin:0 auto;padding:2rem}
 .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem}
 .top-bar h2{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500}
 .btn-add{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;background:var(--gold);color:var(--ink);font-size:13px;font-weight:500;font-family:'DM Sans',sans-serif;border:none;border-radius:var(--radius);cursor:pointer;transition:background 0.15s}
 .btn-add:hover{background:var(--gold-light)}
 .info-banner{background:var(--blue-bg);border:1px solid var(--blue-bdr);border-radius:var(--radius-lg);padding:1rem 1.25rem;margin-bottom:1.5rem;font-size:13px;color:var(--blue);line-height:1.6}
-.tabs{display:flex;gap:2px;background:var(--parchment-dark);border:1px solid var(--border);border-radius:var(--radius);padding:3px;margin-bottom:1.5rem;width:fit-content}
-.tab-btn{padding:7px 20px;font-size:13px;font-family:'DM Sans',sans-serif;border:none;background:none;color:var(--ink-muted);border-radius:3px;cursor:pointer;transition:all 0.15s}
+.tabs{display:flex;gap:2px;background:var(--parchment-dark);border:1px solid var(--border);border-radius:var(--radius);padding:3px;margin-bottom:1.5rem;flex-wrap:wrap}
+.tab-btn{padding:7px 16px;font-size:13px;font-family:'DM Sans',sans-serif;border:none;background:none;color:var(--ink-muted);border-radius:3px;cursor:pointer;transition:all 0.15s}
 .tab-btn.active{background:var(--white);color:var(--ink);font-weight:500;border:1px solid var(--border)}
-
-/* Table */
 .tbl-wrap{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
 .tbl-wrap table{width:100%;border-collapse:collapse;font-size:13px}
 .tbl-wrap thead{background:var(--ink)}
@@ -75,8 +69,6 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
 .badge-hidden{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bdr)}
 .badge-manual{background:var(--green-bg);color:var(--green);border:1px solid var(--green-bdr)}
 .empty-row td{text-align:center;padding:3rem;color:var(--ink-muted);font-size:14px}
-
-/* RSS controls */
 .rss-controls{display:flex;align-items:center;gap:10px;margin-bottom:1rem;flex-wrap:wrap}
 .rss-search{padding:7px 10px 7px 30px;font-size:13px;font-family:'DM Sans',sans-serif;border:1px solid var(--border-strong);border-radius:var(--radius);background:var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='13' viewBox='0 0 24 24' fill='none' stroke='%237A7060' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 9px center;color:var(--ink);width:220px}
 .rss-search:focus{outline:none;border-color:var(--gold)}
@@ -86,10 +78,12 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
 .manual-rss-box{background:var(--blue-bg);border:1px solid var(--blue-bdr);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem}
 .manual-rss-box p{font-size:13px;color:var(--blue);margin-bottom:0.75rem;line-height:1.6}
 .manual-rss-box textarea{width:100%;height:80px;padding:8px;font-family:monospace;font-size:12px;border:1px solid var(--blue-bdr);border-radius:var(--radius);background:var(--white);color:var(--ink);resize:vertical;display:block}
-.manual-rss-box textarea:focus{outline:none;border-color:var(--gold)}
 .manual-rss-box button{margin-top:8px;padding:7px 16px;background:var(--ink);color:var(--gold-light);border:none;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer}
-
-/* Modal */
+.bulk-toolbar{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem;display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:flex-end}
+.bulk-toolbar label-sm{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);display:block;margin-bottom:5px}
+.fi{width:100%;padding:7px 10px;font-size:13px;font-family:'DM Sans',sans-serif;border:1px solid var(--border-strong);border-radius:var(--radius);background:var(--parchment);color:var(--ink)}
+.fi:focus{outline:none;border-color:var(--gold);background:var(--white)}
+.bulk-meta{display:flex;align-items:center;gap:12px;margin-bottom:0.75rem;font-size:13px}
 .overlay{position:fixed;inset:0;background:rgba(28,25,22,0.7);z-index:200;display:none;align-items:center;justify-content:center;padding:1rem}
 .overlay.open{display:flex}
 .modal{background:var(--white);border-radius:var(--radius-lg);width:100%;max-width:600px;max-height:90vh;overflow-y:auto;border:1px solid var(--border)}
@@ -119,8 +113,6 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
 .btn-cancel:hover{border-color:var(--gold)}
 .btn-save{padding:8px 20px;font-size:13px;font-family:'DM Sans',sans-serif;background:var(--ink);color:var(--gold-light);border:none;border-radius:var(--radius);cursor:pointer;font-weight:500}
 .btn-save:hover{background:var(--ink-mid)}
-
-/* Settings */
 .settings-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1rem}
 .settings-card h3{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;margin-bottom:0.35rem}
 .settings-card p{font-size:13px;color:var(--ink-muted);margin-bottom:1rem;line-height:1.6}
@@ -128,12 +120,9 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
 .btn-sec{padding:8px 16px;font-size:13px;font-family:'DM Sans',sans-serif;background:var(--parchment-dark);color:var(--ink-mid);border:1px solid var(--border-strong);border-radius:var(--radius);cursor:pointer;transition:all 0.15s}
 .btn-sec:hover{border-color:var(--gold)}
 .code-out{background:var(--ink);color:var(--gold-light);padding:1rem 1.25rem;border-radius:var(--radius);font-family:monospace;font-size:12px;line-height:1.7;margin-top:1rem;overflow-x:auto;display:none;white-space:pre-wrap;word-break:break-all}
-
-/* Toast */
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--ink);color:var(--gold-light);padding:10px 18px;border-radius:var(--radius);font-size:13px;z-index:300;opacity:0;transform:translateY(8px);transition:all 0.25s;pointer-events:none;border-left:3px solid var(--gold)}
 .toast.show{opacity:1;transform:translateY(0)}
-
-@media(max-width:700px){#admin-screen{padding:1rem}.form-grid{grid-template-columns:1fr}.tbl-wrap{overflow-x:auto}}
+@media(max-width:700px){#admin-screen{padding:1rem}.form-grid{grid-template-columns:1fr}.tbl-wrap{overflow-x:auto}.bulk-toolbar{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -155,7 +144,6 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
   </div>
 </header>
 
-<!-- Login -->
 <div id="login-screen">
   <div class="login-card">
     <div style="font-size:32px;color:var(--gold);margin-bottom:1rem">&#10013;</div>
@@ -169,7 +157,6 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
   </div>
 </div>
 
-<!-- Admin -->
 <div id="admin-screen">
   <div class="top-bar">
     <h2>Sermon Overrides</h2>
@@ -182,17 +169,16 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
 
   <div class="tabs">
     <button class="tab-btn active" id="tab-overrides" onclick="showTab('overrides')">Overrides &amp; Manual</button>
-    <button class="tab-btn" id="tab-rss" onclick="showTab('rss')">RSS Feed Preview</button>
-    <button class="tab-btn" id="tab-settings" onclick="showTab('settings')">Settings &amp; Export</button>
+    <button class="tab-btn" id="tab-rss"       onclick="showTab('rss')">RSS Feed Preview</button>
+    <button class="tab-btn" id="tab-bulk"      onclick="showTab('bulk')">Bulk Override</button>
+    <button class="tab-btn" id="tab-settings"  onclick="showTab('settings')">Settings &amp; Export</button>
   </div>
 
   <!-- Overrides panel -->
   <div id="panel-overrides">
     <div class="tbl-wrap">
       <table>
-        <thead>
-          <tr><th>Title</th><th>Speaker</th><th>Series</th><th>Book</th><th>Date</th><th>Type</th><th>Actions</th></tr>
-        </thead>
+        <thead><tr><th>Title</th><th>Speaker</th><th>Series</th><th>Book</th><th>Date</th><th>Type</th><th>Actions</th></tr></thead>
         <tbody id="ov-tbody"></tbody>
       </table>
     </div>
@@ -201,21 +187,61 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
   <!-- RSS panel -->
   <div id="panel-rss" style="display:none">
     <div id="rss-manual-box" class="manual-rss-box" style="display:none">
-      <p><strong>Proxies failed — paste feed manually.</strong> Open the <a href="https://anchor.fm/s/c1de3e94/podcast/rss" target="_blank" style="color:var(--blue)">RSS feed</a> in a new tab, select all (Ctrl+A), copy, paste below.</p>
-      <textarea id="admin-paste-xml" placeholder="Paste RSS XML here…"></textarea>
+      <p><strong>Feed unavailable.</strong> Open the <a href="https://anchor.fm/s/c1de3e94/podcast/rss" target="_blank" style="color:var(--blue)">RSS feed</a>, select all (Ctrl+A), copy, and paste below.</p>
+      <textarea id="admin-paste-xml" placeholder="Paste RSS XML here&#8230;"></textarea>
       <button onclick="loadPastedAdmin()">Load feed</button>
     </div>
     <div class="rss-controls">
-      <input type="text" class="rss-search" id="rss-search" placeholder="Search entries…" oninput="renderRssTable()">
+      <input type="text" class="rss-search" id="rss-search" placeholder="Search entries&#8230;" oninput="renderRssTable()">
       <button class="btn-reload" onclick="loadRss()">&#8635; Reload</button>
-      <span class="rss-info" id="rss-info">Loading…</span>
+      <span class="rss-info" id="rss-info">Loading&#8230;</span>
     </div>
     <div class="tbl-wrap">
       <table>
-        <thead>
-          <tr><th>Title</th><th>Speaker</th><th>Book</th><th>Series</th><th>Date</th><th>Action</th></tr>
-        </thead>
+        <thead><tr><th>Title</th><th>Speaker</th><th>Book</th><th>Series</th><th>Date</th><th>Action</th></tr></thead>
         <tbody id="rss-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Bulk Override panel -->
+  <div id="panel-bulk" style="display:none">
+    <div class="info-banner">
+      Select sermons, choose a field to update, enter the new value, and click Apply. Great for correcting a speaker name across a whole series or hiding a batch of entries.
+    </div>
+    <div class="bulk-toolbar">
+      <div>
+        <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:5px">Field to update</div>
+        <select id="bulk-field" class="fi" onchange="renderBulkValueInput()">
+          <option value="speaker">Speaker</option>
+          <option value="series">Series</option>
+          <option value="book">Book of the Bible</option>
+          <option value="service">Service</option>
+          <option value="topic">Topic</option>
+          <option value="hidden">Hide from library</option>
+        </select>
+      </div>
+      <div id="bulk-value-wrap">
+        <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:5px">New value</div>
+        <input type="text" id="bulk-value" class="fi" placeholder="e.g. Rev. John Smith">
+      </div>
+      <div>
+        <div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:5px">Filter list</div>
+        <input type="text" id="bulk-search" class="fi" placeholder="Search&#8230;" oninput="renderBulkTable()">
+      </div>
+      <button class="btn-add" onclick="applyBulk()" style="white-space:nowrap;align-self:flex-end">Apply to selected</button>
+    </div>
+    <div class="bulk-meta">
+      <label style="display:flex;align-items:center;gap:6px;cursor:pointer">
+        <input type="checkbox" id="bulk-select-all" onchange="toggleSelectAll(this.checked)">
+        Select all visible
+      </label>
+      <span id="bulk-count" style="color:var(--ink-muted)">0 selected</span>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th style="width:36px"></th><th>Title</th><th>Speaker</th><th>Series</th><th>Book</th><th>Date</th></tr></thead>
+        <tbody id="bulk-tbody"></tbody>
       </table>
     </div>
   </div>
@@ -232,14 +258,14 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
       </div>
       <div class="code-out" id="json-out"></div>
       <div id="import-wrap" style="display:none;margin-top:1rem">
-        <textarea id="import-json" style="width:100%;height:110px;padding:10px;font-family:monospace;font-size:12px;border:1px solid var(--border-strong);border-radius:var(--radius);background:var(--parchment);color:var(--ink)" placeholder="Paste exported JSON here…"></textarea>
+        <textarea id="import-json" style="width:100%;height:110px;padding:10px;font-family:monospace;font-size:12px;border:1px solid var(--border-strong);border-radius:var(--radius);background:var(--parchment);color:var(--ink)" placeholder="Paste exported JSON here&#8230;"></textarea>
         <button class="btn-save" style="margin-top:8px" onclick="doImport()">Import</button>
       </div>
     </div>
 
     <div class="settings-card">
       <h3>Change Admin Password</h3>
-      <p>Password is stored as a SHA-256 hash — the real password is never saved anywhere. To update the built-in default across all devices, click "Show hash" and paste the value into <code>admin.html</code> as <code>DEFAULT_HASH</code>.</p>
+      <p>Password is stored as a SHA-256 hash. To update the built-in default across all devices, click "Show hash" and paste into <code>admin.html</code> as <code>DEFAULT_HASH</code>.</p>
       <div class="form-grid" style="margin-bottom:10px">
         <div>
           <label style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-muted);display:block;margin-bottom:5px">New password</label>
@@ -280,23 +306,23 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
         <div class="form-row"><label>Speaker</label><input type="text" id="f-speaker" placeholder="e.g. Rev. John Smith"></div>
         <div class="form-row"><label>Date</label><input type="date" id="f-date"></div>
       </div>
-      <div class="form-row"><label>Description</label><textarea id="f-desc" placeholder="Brief summary…"></textarea></div>
+      <div class="form-row"><label>Description</label><textarea id="f-desc" placeholder="Brief summary&#8230;"></textarea></div>
       <div class="section-label">Metadata</div>
       <div class="form-grid">
-        <div class="form-row"><label>Book of the Bible</label><select id="f-book"><option value="">— None —</option></select></div>
+        <div class="form-row"><label>Book of the Bible</label><select id="f-book"><option value="">&#8212; None &#8212;</option></select></div>
         <div class="form-row"><label>Topic</label><input type="text" id="f-topic" placeholder="e.g. Prayer, Grace"></div>
         <div class="form-row"><label>Series</label><input type="text" id="f-series" placeholder="e.g. The Lord's Prayer"></div>
         <div class="form-row"><label>Service</label><input type="text" id="f-service" placeholder="e.g. Sunday Morning"></div>
       </div>
       <div class="section-label">Audio</div>
-      <div class="form-row"><label>Audio URL</label><input type="url" id="f-audio" placeholder="https://…"></div>
+      <div class="form-row"><label>Audio URL</label><input type="url" id="f-audio" placeholder="https://&#8230;"></div>
       <div class="section-label">Visibility</div>
       <div class="toggle-row">
         <div class="toggle-row-text"><span>Hide from public library</span><small>Will not appear on the main site</small></div>
         <label class="toggle"><input type="checkbox" id="f-hidden"><span class="toggle-sl"></span></label>
       </div>
       <div class="toggle-row">
-        <div class="toggle-row-text"><span>Manual entry</span><small>Not from RSS — added manually</small></div>
+        <div class="toggle-row-text"><span>Manual entry</span><small>Not from RSS &#8212; added manually</small></div>
         <label class="toggle"><input type="checkbox" id="f-manual"><span class="toggle-sl"></span></label>
       </div>
     </div>
@@ -310,7 +336,6 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
 <div class="toast" id="toast"></div>
 
 <script>
-// If URL contains ?reset, clear stored password hash so DEFAULT_HASH takes effect
 if (window.location.search.indexOf('reset') > -1) {
   localStorage.removeItem('sph_admin_pw_hash');
   window.history.replaceState({}, '', window.location.pathname);
@@ -318,38 +343,30 @@ if (window.location.search.indexOf('reset') > -1) {
 
 var HASH_KEY = 'sph_admin_pw_hash';
 var OV_KEY   = 'sph_sermon_overrides';
-// SHA-256 of 'stpeters2024'
 var DEFAULT_HASH = '8f123737290dcc072766e0ccb9ce5c6df4af0e940d5d09056e6daefd89c0949a';
-var RSS_URL = 'https://anchor.fm/s/c1de3e94/podcast/rss';
-var PROXIES = [
-  function(u){ return 'https://api.allorigins.win/get?url=' + encodeURIComponent(u); },
-  function(u){ return 'https://corsproxy.io/?url=' + encodeURIComponent(u); },
-  function(u){ return 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u); },
-  function(u){ return 'https://thingproxy.freeboard.io/fetch/' + encodeURIComponent(u); }
-];
-var rssSermons = [];
-var editingId  = null;
+var RSS_URL  = 'https://anchor.fm/s/c1de3e94/podcast/rss';
+
+var rssSermons  = [];
+var editingId   = null;
+var bulkSelected = {};
+
 var BIBLE_BOOKS = ['Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth','1 Samuel','2 Samuel','1 Kings','2 Kings','1 Chronicles','2 Chronicles','Ezra','Nehemiah','Esther','Job','Psalms','Psalm','Proverbs','Ecclesiastes','Song of Solomon','Song of Songs','Isaiah','Jeremiah','Lamentations','Ezekiel','Daniel','Hosea','Joel','Amos','Obadiah','Jonah','Micah','Nahum','Habakkuk','Zephaniah','Haggai','Zechariah','Malachi','Matthew','Mark','Luke','John','Acts','Romans','1 Corinthians','2 Corinthians','Galatians','Ephesians','Philippians','Colossians','1 Thessalonians','2 Thessalonians','1 Timothy','2 Timothy','Titus','Philemon','Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation'];
 
-// Populate book select
 (function(){
   var sel = document.getElementById('f-book');
   BIBLE_BOOKS.forEach(function(b){ var o = document.createElement('option'); o.value = o.textContent = b; sel.appendChild(o); });
 })();
 
-/* SHA-256 */
 async function sha256(str) {
   var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
   return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
 }
 function storedHash() { return localStorage.getItem(HASH_KEY) || DEFAULT_HASH; }
 
-/* Auth */
 async function doLogin() {
   var pw = document.getElementById('pw-input').value;
   if (!pw) return;
-  var h = await sha256(pw);
-  if (h === storedHash()) {
+  if (await sha256(pw) === storedHash()) {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('admin-screen').style.display = 'block';
     document.getElementById('logout-btn').style.display = '';
@@ -386,19 +403,17 @@ async function showHash() {
   el.style.display = 'block';
 }
 
-/* Data */
 function getOv() { try { return JSON.parse(localStorage.getItem(OV_KEY)) || []; } catch(e) { return []; } }
 function saveOv(arr) { localStorage.setItem(OV_KEY, JSON.stringify(arr)); }
 
-/* Tabs */
 function showTab(name) {
-  ['overrides','rss','settings'].forEach(function(t){
+  ['overrides','rss','bulk','settings'].forEach(function(t){
     document.getElementById('panel-' + t).style.display = t === name ? '' : 'none';
     document.getElementById('tab-' + t).classList.toggle('active', t === name);
   });
+  if (name === 'bulk') renderBulkTable();
 }
 
-/* Overrides table */
 function renderOverrides() {
   var ov = getOv();
   var tbody = document.getElementById('ov-tbody');
@@ -410,50 +425,31 @@ function renderOverrides() {
     var badge = o.hidden ? '<span class="badge badge-hidden">Hidden</span>'
               : o.manual ? '<span class="badge badge-manual">Manual</span>'
               : '<span class="badge badge-ov">Override</span>';
-    return '<tr><td class="td-title">' + esc(o.title||'—') + '</td>' +
-      '<td class="td-muted">' + esc(o.speaker||'—') + '</td>' +
-      '<td class="td-muted">' + esc(o.series||'—') + '</td>' +
-      '<td class="td-muted">' + esc(o.book||'—') + '</td>' +
-      '<td class="td-muted">' + esc(o.date||'—') + '</td>' +
+    return '<tr><td class="td-title">' + esc(o.title||'') + '</td>' +
+      '<td class="td-muted">' + esc(o.speaker||'') + '</td>' +
+      '<td class="td-muted">' + esc(o.series||'') + '</td>' +
+      '<td class="td-muted">' + esc(o.book||'') + '</td>' +
+      '<td class="td-muted">' + esc(o.date||'') + '</td>' +
       '<td>' + badge + '</td>' +
       '<td><div class="td-actions">' +
-        '<button class="btn-sm btn-edit" onclick="openModal(\'' + esc(o.id) + '\')">Edit</button>' +
-        '<button class="btn-sm btn-del" onclick="delEntry(\'' + esc(o.id) + '\')">Delete</button>' +
+        '<button class="btn-sm btn-edit" onclick="openModal(\'' + o.id + '\')">Edit</button>' +
+        '<button class="btn-sm btn-del"  onclick="delEntry(\'' + o.id + '\')">Delete</button>' +
       '</div></td></tr>';
   }).join('');
 }
 
-/* RSS */
-async function tryFetch(proxyUrl) {
-  var ctrl = new AbortController();
-  var timer = setTimeout(function(){ ctrl.abort(); }, 7000);
-  try {
-    var res = await fetch(proxyUrl, { signal: ctrl.signal });
-    clearTimeout(timer);
-    if (!res.ok) return null;
-    var text = await res.text();
-    if (text.trim().startsWith('{')) {
-      try { var j = JSON.parse(text); text = j.contents || text; } catch(e) {}
-    }
-    return text;
-  } catch(e) { clearTimeout(timer); return null; }
-}
-
 async function loadRss() {
-  document.getElementById('rss-info').textContent = 'Loading…';
+  document.getElementById('rss-info').textContent = 'Loading\u2026';
   document.getElementById('rss-manual-box').style.display = 'none';
-  for (var i = 0; i < PROXIES.length; i++) {
-    document.getElementById('rss-info').textContent = 'Trying proxy ' + (i+1) + '…';
-    var text = await tryFetch(PROXIES[i](RSS_URL));
-    if (!text || text.length < 200) continue;
-    var xml; try { xml = new DOMParser().parseFromString(text,'text/xml'); } catch(e){ continue; }
-    if (xml.querySelector('parsererror')) continue;
-    if (!xml.querySelectorAll('item').length) continue;
-    parseRssXml(xml);
-    return;
+  try {
+    var res = await fetch('feed.json?t=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    var data = await res.json();
+    parseJsonFeed(data.items);
+  } catch(e) {
+    document.getElementById('rss-info').textContent = 'Could not load feed.json';
+    document.getElementById('rss-manual-box').style.display = 'block';
   }
-  document.getElementById('rss-info').textContent = 'All proxies failed';
-  document.getElementById('rss-manual-box').style.display = 'block';
 }
 
 function loadPastedAdmin() {
@@ -462,31 +458,47 @@ function loadPastedAdmin() {
   var xml; try { xml = new DOMParser().parseFromString(text,'text/xml'); } catch(e){ toast('Invalid XML'); return; }
   if (xml.querySelector('parsererror')) { toast('Invalid XML'); return; }
   document.getElementById('rss-manual-box').style.display = 'none';
-  parseRssXml(xml);
+  parseXmlFeed(xml);
   toast('Feed loaded manually');
 }
 
-function parseRssXml(xml) {
+function parseJsonFeed(items) {
+  rssSermons = items.map(function(item, idx){
+    var series = item.titleSeries || '';
+    var book = findBook(series) || findBook(item.title || '');
+    return {
+      id: 'rss_' + idx,
+      title: item.title || '',
+      speaker: item.speaker || 'Unknown',
+      book: book, series: series,
+      service: '', topic: '',
+      date: item.pubDate ? new Date(item.pubDate).toISOString().split('T')[0] : '',
+      desc: item.desc || '',
+      audioUrl: item.audioUrl || ''
+    };
+  });
+  document.getElementById('rss-info').textContent = rssSermons.length + ' entries in feed';
+  renderRssTable();
+}
+
+function parseXmlFeed(xml) {
   var items = xml.querySelectorAll('item');
   rssSermons = [];
   items.forEach(function(item, idx){
     var rawTitle = gT(item,'title');
-    var pipeParts = rawTitle.split('|');
-    var title = pipeParts[0].trim();
-    var titleSeries = pipeParts.length > 1 ? pipeParts[pipeParts.length - 1].trim() : '';
-    var desc  = gT(item,'description') || '';
-    var pub   = gT(item,'pubDate');
-    var enc   = item.querySelector('enclosure');
-    var ns    = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
+    var parts = rawTitle.split('|');
+    var title = parts[0].trim();
+    var series = parts.length > 1 ? parts[parts.length-1].trim() : '';
+    var ns = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
     var author  = (item.getElementsByTagNameNS(ns,'author')[0]||{}).textContent || '';
     var summary = (item.getElementsByTagNameNS(ns,'summary')[0]||{}).textContent || '';
-    var meta = xMeta([title,desc,summary].join(' '));
-    var series = titleSeries || meta.series;
-    var book = meta.book || findBook(series) || findBook(title);
-    rssSermons.push({ id:'rss_'+idx, title:title, speaker:author||meta.speaker||'Unknown',
-      book:book, series:series, service:meta.service, topic:meta.topic,
+    var pub = gT(item,'pubDate');
+    var enc = item.querySelector('enclosure');
+    var book = findBook(series) || findBook(title);
+    rssSermons.push({ id:'rss_'+idx, title:title, speaker:author||'Unknown',
+      book:book, series:series, service:'', topic:'',
       date: pub ? new Date(pub).toISOString().split('T')[0] : '',
-      desc:(summary||desc).replace(/<[^>]+>/g,'').trim(),
+      desc: summary.replace(/<[^>]+>/g,'').trim(),
       audioUrl: enc ? enc.getAttribute('url') : '' });
   });
   document.getElementById('rss-info').textContent = rssSermons.length + ' entries in feed';
@@ -495,8 +507,7 @@ function parseRssXml(xml) {
 
 function renderRssTable() {
   var q = (document.getElementById('rss-search').value||'').toLowerCase();
-  var ov = getOv();
-  var byRssId = {};
+  var ov = getOv(); var byRssId = {};
   ov.forEach(function(o){ if (o.rssId) byRssId[o.rssId] = true; });
   var list = rssSermons.filter(function(s){
     return !q || [s.title,s.speaker,s.book,s.series].join(' ').toLowerCase().indexOf(q) > -1;
@@ -508,11 +519,109 @@ function renderRssTable() {
     return '<tr' + (hasOv ? ' style="background:var(--parchment)"' : '') + '>' +
       '<td class="td-title">' + esc(s.title) + (hasOv ? ' <span class="badge badge-ov" style="margin-left:6px">overridden</span>' : '') + '</td>' +
       '<td class="td-muted">' + esc(s.speaker) + '</td>' +
-      '<td class="td-muted">' + esc(s.book||'—') + '</td>' +
-      '<td class="td-muted">' + esc(s.series||'—') + '</td>' +
+      '<td class="td-muted">' + esc(s.book||'') + '</td>' +
+      '<td class="td-muted">' + esc(s.series||'') + '</td>' +
       '<td class="td-muted">' + esc(s.date) + '</td>' +
-      '<td><button class="btn-sm btn-edit" onclick="openFromRss(\'' + esc(s.id) + '\')">Override</button></td></tr>';
+      '<td><button class="btn-sm btn-edit" onclick="openFromRss(\'' + s.id + '\')">Override</button></td></tr>';
   }).join('');
+}
+
+/* Bulk Override */
+function renderBulkValueInput() {
+  var field = document.getElementById('bulk-field').value;
+  var wrap  = document.getElementById('bulk-value-wrap');
+  var lbl   = '<div style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:5px">New value</div>';
+  if (field === 'hidden') {
+    wrap.innerHTML = lbl.replace('New value','Action') +
+      '<select id="bulk-value" class="fi"><option value="true">Hide selected</option><option value="false">Unhide selected</option></select>';
+  } else if (field === 'book') {
+    var opts = '<option value="">— None —</option>' + BIBLE_BOOKS.map(function(b){ return '<option>' + b + '</option>'; }).join('');
+    wrap.innerHTML = lbl + '<select id="bulk-value" class="fi">' + opts + '</select>';
+  } else {
+    wrap.innerHTML = lbl + '<input type="text" id="bulk-value" class="fi" placeholder="New value\u2026">';
+  }
+}
+
+function renderBulkTable() {
+  var q  = (document.getElementById('bulk-search').value||'').toLowerCase();
+  var ov = getOv(); var byRssId = {};
+  ov.forEach(function(o){ if (o.rssId) byRssId[o.rssId] = o; });
+  var list = rssSermons.filter(function(s){
+    return !q || [s.title,s.speaker,s.series,s.book].join(' ').toLowerCase().indexOf(q) > -1;
+  });
+  var tbody = document.getElementById('bulk-tbody');
+  if (!list.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No entries — load the RSS feed first via the RSS Feed Preview tab.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.map(function(s){
+    var checked = bulkSelected[s.id] ? 'checked' : '';
+    var hasOv   = byRssId[s.id];
+    return '<tr' + (hasOv ? ' style="background:var(--parchment)"' : '') + '>' +
+      '<td><input type="checkbox" ' + checked + ' onchange="toggleBulkRow(\'' + s.id + '\',this.checked)"></td>' +
+      '<td class="td-title">' + esc(s.title) + (hasOv ? ' <span class="badge badge-ov" style="margin-left:4px">overridden</span>' : '') + '</td>' +
+      '<td class="td-muted">' + esc(s.speaker) + '</td>' +
+      '<td class="td-muted">' + esc(s.series||'') + '</td>' +
+      '<td class="td-muted">' + esc(s.book||'') + '</td>' +
+      '<td class="td-muted">' + esc(s.date) + '</td>' +
+    '</tr>';
+  }).join('');
+  updateBulkCount();
+}
+
+function toggleBulkRow(id, checked) {
+  if (checked) bulkSelected[id] = true; else delete bulkSelected[id];
+  updateBulkCount();
+  document.getElementById('bulk-select-all').checked = false;
+}
+
+function toggleSelectAll(checked) {
+  var q = (document.getElementById('bulk-search').value||'').toLowerCase();
+  bulkSelected = {};
+  if (checked) {
+    rssSermons.filter(function(s){
+      return !q || [s.title,s.speaker,s.series,s.book].join(' ').toLowerCase().indexOf(q) > -1;
+    }).forEach(function(s){ bulkSelected[s.id] = true; });
+  }
+  renderBulkTable();
+}
+
+function updateBulkCount() {
+  var n = Object.keys(bulkSelected).length;
+  document.getElementById('bulk-count').textContent = n + ' selected';
+}
+
+function applyBulk() {
+  var ids = Object.keys(bulkSelected);
+  if (!ids.length) { toast('No sermons selected'); return; }
+  var field = document.getElementById('bulk-field').value;
+  var valEl = document.getElementById('bulk-value');
+  var value = valEl ? valEl.value : '';
+  if (field !== 'hidden' && !value.trim()) { toast('Enter a value to apply'); return; }
+
+  var ov = getOv(); var byRssId = {};
+  ov.forEach(function(o){ if (o.rssId) byRssId[o.rssId] = o; });
+
+  ids.forEach(function(rssId){
+    var s = rssSermons.find(function(x){ return x.id === rssId; });
+    if (!s) return;
+    var entry = byRssId[rssId];
+    if (!entry) {
+      entry = { id: 'ov_' + Date.now() + '_' + Math.random().toString(36).slice(2,5),
+        rssId: rssId, title: s.title, speaker: s.speaker, date: s.date, desc: s.desc,
+        book: s.book, topic: '', series: s.series, service: s.service,
+        audioUrl: s.audioUrl, hidden: false, manual: false };
+      ov.unshift(entry);
+      byRssId[rssId] = entry;
+    }
+    if (field === 'hidden') entry.hidden = (value === 'true');
+    else entry[field] = value;
+  });
+
+  saveOv(ov);
+  renderBulkTable();
+  renderOverrides();
+  toast('Applied to ' + ids.length + ' sermon' + (ids.length !== 1 ? 's' : '') + ' \u2713');
 }
 
 /* Modal */
@@ -522,15 +631,15 @@ function openModal(id) {
   document.getElementById('modal-title').textContent = id ? 'Edit Sermon' : 'Add Manual Sermon';
   document.getElementById('f-id').value = id || '';
   document.getElementById('f-id').dataset.rssid = '';
-  setF('f-title',   ov ? ov.title   : '');
-  setF('f-speaker', ov ? ov.speaker : '');
-  setF('f-date',    ov ? ov.date    : '');
-  setF('f-desc',    ov ? ov.desc    : '');
-  setF('f-book',    ov ? ov.book    : '');
-  setF('f-topic',   ov ? ov.topic   : '');
-  setF('f-series',  ov ? ov.series  : '');
-  setF('f-service', ov ? ov.service : '');
-  setF('f-audio',   ov ? ov.audioUrl: '');
+  setF('f-title',   ov ? ov.title    : '');
+  setF('f-speaker', ov ? ov.speaker  : '');
+  setF('f-date',    ov ? ov.date     : '');
+  setF('f-desc',    ov ? ov.desc     : '');
+  setF('f-book',    ov ? ov.book     : '');
+  setF('f-topic',   ov ? ov.topic    : '');
+  setF('f-series',  ov ? ov.series   : '');
+  setF('f-service', ov ? ov.service  : '');
+  setF('f-audio',   ov ? ov.audioUrl : '');
   document.getElementById('f-hidden').checked = ov ? !!ov.hidden : false;
   document.getElementById('f-manual').checked = ov ? !!ov.manual : true;
   document.getElementById('overlay').classList.add('open');
@@ -545,36 +654,24 @@ function openFromRss(rssId) {
   document.getElementById('modal-title').textContent = 'Override RSS Entry';
   document.getElementById('f-id').value = '';
   document.getElementById('f-id').dataset.rssid = rssId;
-  setF('f-title',   s.title);
-  setF('f-speaker', s.speaker);
-  setF('f-date',    s.date);
-  setF('f-desc',    s.desc);
-  setF('f-book',    s.book);
-  setF('f-topic',   s.topic);
-  setF('f-series',  s.series);
-  setF('f-service', s.service);
+  setF('f-title',   s.title);   setF('f-speaker', s.speaker);
+  setF('f-date',    s.date);    setF('f-desc',    s.desc);
+  setF('f-book',    s.book);    setF('f-topic',   s.topic||'');
+  setF('f-series',  s.series);  setF('f-service', s.service||'');
   setF('f-audio',   s.audioUrl);
   document.getElementById('f-hidden').checked = false;
   document.getElementById('f-manual').checked = false;
   document.getElementById('overlay').classList.add('open');
 }
-function closeModal() {
-  document.getElementById('overlay').classList.remove('open');
-  editingId = null;
-}
-function setF(id, val) {
-  var el = document.getElementById(id);
-  el.value = val || '';
-}
+function closeModal() { document.getElementById('overlay').classList.remove('open'); editingId = null; }
+function setF(id, val) { document.getElementById(id).value = val || ''; }
 function saveEntry() {
   var title = document.getElementById('f-title').value.trim();
   if (!title) { toast('Title is required'); return; }
   var ov = getOv();
-  var id = editingId || ('manual_' + Date.now());
+  var id = editingId || ('ov_' + Date.now());
   var rssId = document.getElementById('f-id').dataset.rssid || '';
-  var entry = {
-    id: id, rssId: rssId || undefined,
-    title: title,
+  var entry = { id:id, rssId:rssId||undefined, title:title,
     speaker:  document.getElementById('f-speaker').value.trim(),
     date:     document.getElementById('f-date').value,
     desc:     document.getElementById('f-desc').value.trim(),
@@ -584,14 +681,11 @@ function saveEntry() {
     service:  document.getElementById('f-service').value.trim(),
     audioUrl: document.getElementById('f-audio').value.trim(),
     hidden:   document.getElementById('f-hidden').checked,
-    manual:   document.getElementById('f-manual').checked
-  };
+    manual:   document.getElementById('f-manual').checked };
   if (editingId) {
     var idx = ov.findIndex(function(o){ return o.id === editingId; });
     if (idx > -1) ov[idx] = entry;
-  } else {
-    ov.unshift(entry);
-  }
+  } else { ov.unshift(entry); }
   saveOv(ov);
   closeModal();
   renderOverrides();
@@ -601,82 +695,54 @@ function saveEntry() {
 function delEntry(id) {
   if (!confirm('Delete this override?')) return;
   saveOv(getOv().filter(function(o){ return o.id !== id; }));
-  renderOverrides();
-  renderRssTable();
+  renderOverrides(); renderRssTable();
   toast('Deleted');
 }
 
 /* Settings */
 function doExport() {
-  var blob = new Blob([JSON.stringify(getOv(), null, 2)], {type:'application/json'});
+  var blob = new Blob([JSON.stringify(getOv(),null,2)],{type:'application/json'});
   var url = URL.createObjectURL(blob);
-  var a = document.createElement('a'); a.href = url; a.download = 'sermon-overrides.json'; a.click();
-  URL.revokeObjectURL(url);
-  toast('Exported');
+  var a = document.createElement('a'); a.href=url; a.download='sermon-overrides.json'; a.click();
+  URL.revokeObjectURL(url); toast('Exported');
 }
 function toggleShowJson() {
   var el = document.getElementById('json-out');
-  if (el.style.display === 'block') { el.style.display = 'none'; return; }
-  el.textContent = JSON.stringify(getOv(), null, 2);
-  el.style.display = 'block';
+  if (el.style.display==='block'){el.style.display='none';return;}
+  el.textContent = JSON.stringify(getOv(),null,2); el.style.display='block';
 }
 function toggleImport() {
   var el = document.getElementById('import-wrap');
-  el.style.display = el.style.display === 'none' ? '' : 'none';
+  el.style.display = el.style.display==='none' ? '' : 'none';
 }
 function doImport() {
   try {
     var data = JSON.parse(document.getElementById('import-json').value.trim());
     if (!Array.isArray(data)) throw new Error('Expected array');
-    saveOv(data);
-    renderOverrides();
-    renderRssTable();
-    document.getElementById('import-json').value = '';
-    document.getElementById('import-wrap').style.display = 'none';
+    saveOv(data); renderOverrides(); renderRssTable();
+    document.getElementById('import-json').value='';
+    document.getElementById('import-wrap').style.display='none';
     toast('Imported ' + data.length + ' overrides');
   } catch(e) { toast('Invalid JSON: ' + e.message); }
 }
 function clearAll() {
   if (!confirm('Delete ALL overrides permanently?')) return;
-  saveOv([]);
-  renderOverrides();
-  renderRssTable();
-  toast('Cleared');
+  saveOv([]); renderOverrides(); renderRssTable(); toast('Cleared');
 }
 
 /* Helpers */
-function gT(el, tag) { var n = el.querySelector(tag); return n ? n.textContent.trim() : ''; }
 function findBook(text) {
   if (!text) return '';
-  for (var i = 0; i < BIBLE_BOOKS.length; i++) {
-    if (new RegExp('\b' + BIBLE_BOOKS[i].replace(/\s/g,'\s') + '\b','i').test(text)) return BIBLE_BOOKS[i];
+  for (var i=0;i<BIBLE_BOOKS.length;i++) {
+    if (new RegExp('\\b' + BIBLE_BOOKS[i].replace(/\s/g,'\\s') + '\\b','i').test(text)) return BIBLE_BOOKS[i];
   }
   return '';
 }
-
-function xMeta(text) {
-  var c = text.replace(/<[^>]+>/g,' ');
-  var book='';
-  for(var i=0;i<BIBLE_BOOKS.length;i++){
-    if(new RegExp('\\b'+BIBLE_BOOKS[i].replace(/\s/g,'\\s')+'\\b','i').test(c)){book=BIBLE_BOOKS[i];break;}
-  }
-  var sm  = c.match(/(?:speaker|preacher|preached by|by)[:\s]+([A-Z][a-z]+(?: [A-Z][a-z]+){0,2})/);
-  var srm = c.match(/(?:series|part \d+ of|in the series)[:\s"'""]+([^,.\n"'"]{3,50})/i);
-  var svm = c.match(/\b(sunday (?:morning|evening|night|service)?|evening service|morning service|9[: ]?am|10[: ]?am|11[: ]?am|6[: ]?pm|7[: ]?pm|christmas|easter|good friday|advent)\b/i);
-  var tm  = c.match(/(?:topic|theme)[:\s]+([A-Za-z][A-Za-z ]{3,35})(?:[,.\n]|$)/i);
-  return {
-    book: book,
-    speaker: sm  ? sm[1].trim()  : '',
-    series:  srm ? srm[1].trim().replace(/["""'']$/,'') : '',
-    service: svm ? svm[0].trim().replace(/\b\w/g,function(x){return x.toUpperCase();}) : '',
-    topic:   tm  ? tm[1].trim().replace(/\b\w/g,function(x){return x.toUpperCase();}) : ''
-  };
-}
-function esc(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : ''; }
-function toast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show'); }, 2800);
+function gT(el,tag){ var n=el.querySelector(tag); return n?n.textContent.trim():''; }
+function esc(s){ return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''; }
+function toast(msg){
+  var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); },2800);
 }
 </script>
 </body>
