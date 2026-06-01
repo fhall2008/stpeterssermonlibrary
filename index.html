@@ -29,11 +29,6 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
 .lang-tab{padding:6px 18px;font-size:13px;color:rgba(255,255,255,0.55);cursor:pointer;border-radius:3px;border:none;background:none;font-family:'DM Sans',sans-serif;transition:all 0.2s}
 .lang-tab.active{background:var(--gold);color:var(--ink);font-weight:500}
 .lang-tab.soon{opacity:0.4;cursor:not-allowed}
-.hero{background:var(--ink);padding:3rem 2rem 2.5rem;text-align:center;border-bottom:1px solid var(--border)}
-.hero-eyebrow{font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem}
-.hero h2{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,52px);font-weight:500;color:#fff;line-height:1.1;margin-bottom:0.5rem}
-.hero h2 em{color:var(--gold-light);font-style:italic}
-.hero-sub{font-size:15px;color:rgba(255,255,255,0.45);font-weight:300}
 .stats-bar{background:var(--parchment-dark);border-bottom:1px solid var(--border);padding:0.85rem 2rem}
 .stats-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:2rem;flex-wrap:wrap}
 .stat{font-size:13px;color:var(--ink-muted)}.stat strong{color:var(--ink);font-weight:500}
@@ -100,7 +95,6 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
 footer{background:var(--ink);border-top:2px solid var(--gold);padding:2rem;text-align:center;margin-top:4rem}
 footer p{font-size:12px;color:rgba(255,255,255,0.3);letter-spacing:0.06em}
 footer .fn{color:var(--gold-light);font-weight:500}
-@media(max-width:900px){.main-layout{grid-template-columns:1fr;padding:1rem}.sidebar{position:static}.hero{padding:2rem 1rem 1.5rem}}
 @media(max-width:600px){.sermon-card{grid-template-columns:1fr}.sermon-actions{flex-direction:row;align-items:center}}
 </style>
 </head>
@@ -125,11 +119,6 @@ footer .fn{color:var(--gold-light);font-weight:500}
   </div>
 </header>
 
-<div class="hero">
-  <p class="hero-eyebrow">Preaching the Word</p>
-  <h2>The <em>Sermon</em> Archive</h2>
-  <p class="hero-sub">Explore messages from Sunday services and special series</p>
-</div>
 
 <div class="stats-bar">
   <div class="stats-inner">
