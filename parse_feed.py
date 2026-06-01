@@ -8,6 +8,18 @@ tree = ET.parse('feed.xml')
 root = tree.getroot()
 channel = root.find('channel')
 
+# Channel-level artwork (fallback for all episodes)
+channel_image = ''
+ch_img = channel.find('image')
+if ch_img is not None:
+    url_el = ch_img.find('url')
+    if url_el is not None:
+        channel_image = (url_el.text or '').strip()
+# iTunes channel art (higher res, takes priority)
+itunes_ch_img = channel.find('itunes:image', NS)
+if itunes_ch_img is not None:
+    channel_image = itunes_ch_img.get('href', channel_image)
+
 items = []
 for idx, item in enumerate(channel.findall('item')):
     def gt(tag):
@@ -28,6 +40,12 @@ for idx, item in enumerate(channel.findall('item')):
 
     desc = re.sub(r'<[^>]+>', '', gi('summary') or gt('description')).strip()
 
+    # Episode-level artwork (itunes:image href attr)
+    episode_image = ''
+    ep_img = item.find('itunes:image', NS)
+    if ep_img is not None:
+        episode_image = ep_img.get('href', '')
+
     items.append({
         'id': idx,
         'title': title,
@@ -38,9 +56,11 @@ for idx, item in enumerate(channel.findall('item')):
         'link': gt('link'),
         'duration': gi('duration'),
         'speaker': gi('author'),
+        'image': episode_image,   # episode-specific art (may be empty)
     })
 
 output = {
+    'channelImage': channel_image,  # podcast cover art
     'items': items,
     'updated': datetime.utcnow().isoformat() + 'Z'
 }
@@ -48,4 +68,5 @@ output = {
 with open('feed.json', 'w') as f:
     json.dump(output, f)
 
-print(f'Saved {len(items)} sermons to feed.json')
+has_ep_art = sum(1 for i in items if i['image'])
+print(f'Saved {len(items)} sermons. Channel art: {"yes" if channel_image else "no"}. Episode art: {has_ep_art}/{len(items)}')
