@@ -269,24 +269,21 @@ function loadPasted() {
 
 function findBook(text) {
   if (!text) return '';
+  var clean = String(text).replace(/<[^>]+>/g, ' ');
   for (var i = 0; i < BIBLE_BOOKS.length; i++) {
-    if (new RegExp('\b' + BIBLE_BOOKS[i].replace(/\s/g,'\s') + '\b','i').test(text)) return BIBLE_BOOKS[i];
+    var re = new RegExp('\\b' + BIBLE_BOOKS[i].replace(/\s/g, '\\s') + '\\b', 'i');
+    if (re.test(clean)) return BIBLE_BOOKS[i];
   }
   return '';
 }
 
 function extractMeta(text) {
   var c = text.replace(/<[^>]+>/g, ' ');
-  var book = '';
-  for (var i = 0; i < BIBLE_BOOKS.length; i++) {
-    if (new RegExp('\\b' + BIBLE_BOOKS[i].replace(/\s/g,'\\s') + '\\b','i').test(c)) { book = BIBLE_BOOKS[i]; break; }
-  }
   var sm = c.match(/(?:speaker|preacher|preached by|by)[:\s]+([A-Z][a-z]+(?: [A-Z][a-z]+){0,2})/);
   var srm = c.match(/(?:series|part \d+ of|in the series)[:\s"'""]+([^,.\n"'"]{3,50})/i);
   var svm = c.match(/\b(sunday (?:morning|evening|night|service)?|evening service|morning service|9[: ]?am|10[: ]?am|11[: ]?am|6[: ]?pm|7[: ]?pm|christmas|easter|good friday|advent)\b/i);
   var tm  = c.match(/(?:topic|theme)[:\s]+([A-Za-z][A-Za-z ]{3,35})(?:[,.\n]|$)/i);
   return {
-    book: book,
     speaker: sm ? sm[1].trim() : '',
     series: srm ? srm[1].trim().replace(/["""'']$/,'') : '',
     service: svm ? svm[0].trim().replace(/\b\w/g,function(x){return x.toUpperCase();}) : '',
@@ -301,7 +298,8 @@ function parseAndRender(items) {
     var series = item.titleSeries || '';
     var meta = extractMeta([title, item.desc, item.speaker].join(' '));
     if (!series) series = meta.series;
-    var book = meta.book || findBook(series) || findBook(title);
+    // Scan all fields for a Bible book - first match wins
+    var book = findBook(title) || findBook(series) || findBook(item.desc) || findBook(item.speaker) || '';
     sermons.push({
       id: item.id, title: title,
       desc: item.desc || '',
