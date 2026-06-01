@@ -19,7 +19,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--parchment);color:var(--in
 header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;position:sticky;top:0;z-index:100}
 .header-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:68px;gap:1rem}
 .logo{display:flex;align-items:center;gap:14px}
-.logo svg{width:32px;height:32px;flex-shrink:0}
+
 .logo-text h1{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:#fff;letter-spacing:0.02em;line-height:1.1}
 .logo-text span{font-size:11px;font-weight:300;color:var(--gold-light);letter-spacing:0.12em;text-transform:uppercase}
 .header-right{display:flex;align-items:center;gap:10px}
@@ -105,10 +105,9 @@ footer .fn{color:var(--gold-light);font-weight:500}
 <header>
   <div class="header-inner">
     <div class="logo">
-      <svg viewBox="0 0 32 32" fill="none"><rect x="13" y="2" width="6" height="28" rx="1" fill="#B8965A"/><rect x="4" y="10" width="24" height="6" rx="1" fill="#B8965A"/></svg>
+      <img src="logo.png" alt="St Peter's Anglican Church Hornsby" style="height:48px;width:auto;display:block">
       <div class="logo-text">
-        <h1>St. Peter's Hornsby</h1>
-        <span>Sermon Library</span>
+        <span style="font-size:11px;font-weight:300;color:var(--gold-light);letter-spacing:0.14em;text-transform:uppercase">Sermon Library</span>
       </div>
     </div>
     <div class="header-right">
@@ -199,7 +198,7 @@ footer .fn{color:var(--gold-light);font-weight:500}
 </div>
 
 <footer>
-  <p><span class="fn">St. Peter's Anglican Church, Hornsby</span> &nbsp;·&nbsp; Sermon Library</p>
+  <p><img src="logo.png" alt="St Peter's Anglican Church Hornsby" style="height:32px;width:auto;vertical-align:middle;opacity:0.7;margin-right:10px">Sermon Library</p>
 </footer>
 
 <script>
