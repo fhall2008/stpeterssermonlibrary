@@ -390,7 +390,13 @@ var OVERRIDES_KEY = 'sph_sermon_overrides';
 // To generate a new hash: open browser console on this page, run sha256('yournewpassword'), copy the result here
 var DEFAULT_HASH = '8f123737290dcc072766e0ccb9ce5c6df4af0e940d5d09056e6daefd89c0949a';
 var RSS_URL = 'https://anchor.fm/s/c1de3e94/podcast/rss';
-var PROXY = 'https://api.allorigins.win/get?url=';
+
+var PROXIES = [
+  { url: 'https://api.allorigins.win/get?url={URL}', json: true, key: 'contents' },
+  { url: 'https://corsproxy.io/?url={URL}', json: false },
+  { url: 'https://api.codetabs.com/v1/proxy?quest={URL}', json: false },
+  { url: 'https://thingproxy.freeboard.io/fetch/{URL}', json: false }
+];
 
 var rssSermons = [];
 var editingId = null;
@@ -534,8 +540,55 @@ async function loadRss() {
     document.getElementById('rss-info').textContent = rssSermons.length + ' entries in feed';
     renderRssTable();
   } catch(e) {
-    document.getElementById('rss-info').textContent = 'Feed load failed';
+    document.getElementById('rss-info').textContent = 'Parse error: ' + e.message;
   }
+}
+
+function showAdminManualInput() {
+  var existing = document.getElementById('admin-manual-rss');
+  if (existing) return;
+  var div = document.createElement('div');
+  div.id = 'admin-manual-rss';
+  div.style.cssText = 'background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem';
+  div.innerHTML = '<div style="font-size:12px;color:var(--blue);margin-bottom:8px;font-weight:500">Paste RSS feed XML to load manually</div>' +
+    '<textarea id="admin-rss-text" style="width:100%;height:90px;padding:8px;font-family:monospace;font-size:12px;border:1px solid var(--blue-border);border-radius:var(--radius);background:var(--white);resize:vertical" placeholder="Paste the full RSS XML here…"></textarea>' +
+    '<button onclick="loadAdminManual()" style="margin-top:8px;padding:7px 16px;background:var(--ink);color:var(--gold-light);border:none;border-radius:var(--radius);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer">Load feed</button>';
+  var panel = document.getElementById('panel-rss');
+  panel.insertBefore(div, panel.firstChild);
+}
+
+function loadAdminManual() {
+  var text = document.getElementById('admin-rss-text').value.trim();
+  if (!text) return;
+  try {
+    var xml = new DOMParser().parseFromString(text, 'text/xml');
+    if (xml.querySelector('parsererror')) { showToast('Invalid XML'); return; }
+    var items = xml.querySelectorAll('item');
+    rssSermons = [];
+    items.forEach(function(item, idx) {
+      var title = getT(item, 'title');
+      var desc = getT(item, 'description') || '';
+      var pubDate = getT(item, 'pubDate');
+      var enc = item.querySelector('enclosure');
+      var ns = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
+      var author = (item.getElementsByTagNameNS(ns,'author')[0]||{}).textContent || '';
+      var summary = (item.getElementsByTagNameNS(ns,'summary')[0]||{}).textContent || '';
+      var combined = [title, desc, summary].join(' ');
+      var meta = extractMeta(combined);
+      rssSermons.push({
+        id: 'rss_' + idx, title: title,
+        speaker: author || meta.speaker || 'Unknown',
+        book: meta.book, series: meta.series, service: meta.service, topic: meta.topic,
+        date: pubDate ? new Date(pubDate).toISOString().split('T')[0] : '',
+        desc: (summary || desc).replace(/<[^>]+>/g,'').trim(),
+        audioUrl: enc ? enc.getAttribute('url') : ''
+      });
+    });
+    document.getElementById('rss-info').textContent = rssSermons.length + ' entries loaded (manual)';
+    document.getElementById('admin-manual-rss').style.display = 'none';
+    renderRssTable();
+    showToast('Feed loaded — ' + rssSermons.length + ' sermons');
+  } catch(e) { showToast('Error: ' + e.message); }
 }
 
 function reloadRss() { loadRss(); }
