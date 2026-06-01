@@ -4,24 +4,27 @@ from datetime import datetime
 
 NS = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd'}
 
-YOUTUBE_API_KEY    = os.environ.get('YOUTUBE_API_KEY', '')
-YOUTUBE_HANDLE     = '@StPetersHornsby'
+YOUTUBE_API_KEY = os.environ.get('YOUTUBE_API_KEY', '')
+YOUTUBE_HANDLE  = '@StPetersHornsby'
 
-# Anchor/Spotify auto-uploads podcast audio as YouTube videos.
-# These are NOT real sermon videos — they're static image + audio.
-# We detect them by checking the video's own channel vs the church channel,
-# and by matching duration within a tolerance of the podcast episode.
-DURATION_TOLERANCE_SECONDS = 120   # allow 2 min difference for intro/outro
+# Anchor/Spotify audiograms always contain these in their description.
+# Real sermon videos will NOT have these.
+AUDIOGRAM_MARKERS = [
+    'anchor.fm',
+    'spotify.com/episode',
+    'open.spotify.com',
+    'podcasters.spotify.com',
+    'this episode is also available as a podcast',
+    'listen to this episode from',
+]
 
 def iso8601_to_seconds(d):
-    """Convert YouTube ISO 8601 duration (PT1H2M3S) to seconds."""
     m = re.match(r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?', d or '')
     if not m: return 0
     h, mn, s = (int(x or 0) for x in m.groups())
     return h * 3600 + mn * 60 + s
 
 def duration_str_to_seconds(d):
-    """Convert HH:MM:SS or MM:SS podcast duration to seconds."""
     if not d: return 0
     parts = d.strip().split(':')
     try:
@@ -45,113 +48,93 @@ def resolve_channel_id(api_key):
         print(f'  Warning: could not resolve channel ID: {e}')
     return None
 
-def search_youtube(api_key, channel_id, query, podcast_duration_secs):
-    """
-    Search the church YouTube channel for a real sermon video.
-    Returns (video_url, video_id) or ('', '') if no genuine match found.
-    """
-    # Step 1: search for candidates
+def is_audiogram(video):
+    """Return True if this video is an Anchor/Spotify audiogram upload."""
+    desc = video['snippet'].get('description', '').lower()
+    for marker in AUDIOGRAM_MARKERS:
+        if marker in desc:
+            return True
+    return False
+
+def search_youtube(api_key, channel_id, query, podcast_secs):
+    """Search channel for a real sermon video, skipping audiograms."""
     params = urllib.parse.urlencode({
         'part': 'snippet',
         'channelId': channel_id,
         'q': query,
         'type': 'video',
-        'maxResults': 5,          # get a few to filter
+        'maxResults': 5,
         'key': api_key,
     })
     try:
         with urllib.request.urlopen('https://www.googleapis.com/youtube/v3/search?' + params, timeout=10) as r:
-            data = json.loads(r.read())
+            candidates = json.loads(r.read()).get('items', [])
     except Exception as e:
         print(f'    Search error: {e}')
         return '', ''
 
-    candidates = data.get('items', [])
     if not candidates:
         return '', ''
 
-    # Step 2: fetch video details (duration + channel) for all candidates
+    # Fetch full details so we can read the description and duration
     vid_ids = ','.join(i['id']['videoId'] for i in candidates)
     detail_params = urllib.parse.urlencode({
-        'part': 'contentDetails,snippet',
+        'part': 'snippet,contentDetails',
         'id': vid_ids,
         'key': api_key,
     })
     try:
         with urllib.request.urlopen('https://www.googleapis.com/youtube/v3/videos?' + detail_params, timeout=10) as r:
-            detail_data = json.loads(r.read())
+            videos = json.loads(r.read()).get('items', [])
     except Exception as e:
         print(f'    Detail fetch error: {e}')
         return '', ''
 
-    for video in detail_data.get('items', []):
+    for video in videos:
         vid_id   = video['id']
-        vid_ch   = video['snippet']['channelId']
-        duration = iso8601_to_seconds(video['contentDetails']['duration'])
         title    = video['snippet']['title']
+        duration = iso8601_to_seconds(video['contentDetails']['duration'])
 
-        # Must be on the church channel (not Spotify's auto-upload channel)
-        if vid_ch != channel_id:
-            print(f'    Skipping "{title}" — wrong channel')
+        # Skip audiograms — they have Spotify/Anchor links in description
+        if is_audiogram(video):
+            print(f'    Skipping audiogram: "{title}"')
             continue
 
-        # Skip very short videos (< 5 min) — likely not a sermon
+        # Skip anything under 5 minutes
         if duration < 300:
-            print(f'    Skipping "{title}" — too short ({duration}s)')
+            print(f'    Skipping short video: "{title}" ({duration}s)')
             continue
 
-        # Skip Spotify/Anchor auto-uploads:
-        # They typically say "... on Spotify" or "Anchor" in the title/description
-        desc_lower = video['snippet'].get('description', '').lower()
-        title_lower = title.lower()
-        if any(kw in desc_lower for kw in ['spotify', 'anchor.fm', 'automatically uploaded']):
-            print(f'    Skipping "{title}" — looks like Spotify auto-upload')
-            continue
-
-        # If we have a podcast duration, check it's within tolerance
-        # Real videos tend to be longer (have intro/outro/worship) or similar
-        if podcast_duration_secs > 0:
-            diff = abs(duration - podcast_duration_secs)
-            # Allow up to DURATION_TOLERANCE_SECONDS difference OR video is longer
-            # (church may include extra content in video version)
-            if diff > DURATION_TOLERANCE_SECONDS and duration < podcast_duration_secs:
-                print(f'    Skipping "{title}" — duration mismatch ({duration}s vs podcast {podcast_duration_secs}s)')
-                continue
-
-        print(f'    Matched: "{title}" ({duration}s)')
+        print(f'    Matched real video: "{title}" ({duration}s)')
         return f'https://www.youtube.com/watch?v={vid_id}', vid_id
 
     return '', ''
 
-# ── Parse RSS ──────────────────────────────────────────────────────────────
+# ── Parse RSS ─────────────────────────────────────────────────────────────
 tree = ET.parse('feed.xml')
 root = tree.getroot()
-channel = root.find('channel')
+channel_el = root.find('channel')
 
-# Channel artwork
 channel_image = ''
-ch_img = channel.find('image')
+ch_img = channel_el.find('image')
 if ch_img is not None:
     url_el = ch_img.find('url')
     if url_el is not None:
         channel_image = (url_el.text or '').strip()
-itunes_ch_img = channel.find('itunes:image', NS)
+itunes_ch_img = channel_el.find('itunes:image', NS)
 if itunes_ch_img is not None:
     channel_image = itunes_ch_img.get('href', channel_image)
 
-# ── Resolve YouTube channel ID ─────────────────────────────────────────────
+# ── Resolve YouTube channel ───────────────────────────────────────────────
 yt_channel_id = None
 if YOUTUBE_API_KEY:
     print(f'Resolving YouTube channel ID for {YOUTUBE_HANDLE}...')
     yt_channel_id = resolve_channel_id(YOUTUBE_API_KEY)
-    if yt_channel_id:
-        print(f'  Channel ID: {yt_channel_id}')
-    else:
-        print('  Could not resolve — YouTube search skipped')
+    print(f'  Channel ID: {yt_channel_id}' if yt_channel_id else '  Could not resolve — YouTube skipped')
 else:
     print('No YOUTUBE_API_KEY — skipping YouTube search')
 
-# ── Load cached video matches from existing feed.json ─────────────────────
+# ── Load cached matches ───────────────────────────────────────────────────
 cached_videos = {}
 try:
     with open('feed.json') as f:
@@ -168,7 +151,7 @@ except Exception:
 
 # ── Parse items ───────────────────────────────────────────────────────────
 items = []
-for idx, item in enumerate(channel.findall('item')):
+for idx, item in enumerate(channel_el.findall('item')):
     def gt(tag):
         el = item.find(tag)
         return (el.text or '').strip() if el is not None else ''
@@ -188,42 +171,34 @@ for idx, item in enumerate(channel.findall('item')):
     ep_img    = item.find('itunes:image', NS)
     image     = ep_img.get('href', '') if ep_img is not None else ''
 
-    podcast_secs = duration_str_to_seconds(duration)
-
-    # YouTube match — use cache or search
     video_url = ''
     video_id  = ''
     if title in cached_videos:
         video_url = cached_videos[title]['videoUrl']
         video_id  = cached_videos[title]['videoId']
-        print(f'  Cached: {title}')
     elif yt_channel_id and YOUTUBE_API_KEY:
         print(f'Searching YouTube: "{title}"')
-        video_url, video_id = search_youtube(YOUTUBE_API_KEY, yt_channel_id, title, podcast_secs)
+        video_url, video_id = search_youtube(
+            YOUTUBE_API_KEY, yt_channel_id, title,
+            duration_str_to_seconds(duration)
+        )
 
     items.append({
-        'id':          idx,
-        'title':       title,
-        'titleSeries': title_series,
-        'desc':        desc,
-        'pubDate':     gt('pubDate'),
-        'audioUrl':    audio_url,
-        'link':        gt('link'),
-        'duration':    duration,
-        'speaker':     gi('author'),
-        'image':       image,
-        'videoUrl':    video_url,
-        'videoId':     video_id,
+        'id': idx, 'title': title, 'titleSeries': title_series,
+        'desc': desc, 'pubDate': gt('pubDate'),
+        'audioUrl': audio_url, 'link': gt('link'),
+        'duration': duration, 'speaker': gi('author'),
+        'image': image, 'videoUrl': video_url, 'videoId': video_id,
     })
 
 output = {
     'channelImage': channel_image,
-    'items':        items,
-    'updated':      datetime.utcnow().isoformat() + 'Z',
+    'items': items,
+    'updated': datetime.utcnow().isoformat() + 'Z',
 }
 
 with open('feed.json', 'w') as f:
     json.dump(output, f)
 
 matched = sum(1 for i in items if i['videoId'])
-print(f'\nDone. {len(items)} sermons, {matched} YouTube matches.')
+print(f'\nDone. {len(items)} sermons, {matched} real YouTube videos matched.')
