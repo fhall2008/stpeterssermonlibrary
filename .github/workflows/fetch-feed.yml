@@ -19,7 +19,9 @@ jobs:
                -H "User-Agent: Mozilla/5.0" \
                -o feed.xml
 
-      - name: Parse RSS to JSON
+      - name: Parse RSS and search YouTube
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: python3 parse_feed.py
 
       - name: Commit feed.json
