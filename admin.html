@@ -180,10 +180,10 @@ header { background: var(--ink); border-bottom: 2px solid var(--gold); padding: 
     <div class="cross">&#10013;</div>
     <h2>Admin Access</h2>
     <p>Enter your admin password to manage sermon overrides</p>
-    <input type="password" id="pw-input" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()">
+    <input type="password" id="pw-input" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()" autocomplete="current-password">
     <button class="btn-primary" onclick="doLogin()">Sign in</button>
     <div class="login-error" id="login-error">Incorrect password. Please try again.</div>
-    <p class="login-hint">Default password: <strong>stpeters2024</strong><br>Change this in the HTML before deploying.</p>
+    <p class="login-hint">Default password: <strong>stpeters2024</strong><br>Password is hashed with SHA-256 &mdash; never stored in plain text.</p>
   </div>
 </div>
 
@@ -267,14 +267,22 @@ header { background: var(--ink); border-bottom: 2px solid var(--gold); padding: 
 
     <div class="export-card" style="margin-top:1rem">
       <h3>Change Admin Password</h3>
-      <p>Update the password stored in this browser. Note: for a shared team setup, update the password directly in <code>admin.html</code> before deploying.</p>
-      <div style="display:flex;gap:10px;align-items:flex-end">
-        <div style="flex:1">
+      <p>Your password is stored as a SHA-256 hash &mdash; the actual password is never saved anywhere. Changes apply to this browser; to update the built-in default, paste the generated hash into <code>admin.html</code> as <code>DEFAULT_HASH</code>.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div>
           <label style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-muted);display:block;margin-bottom:5px">New password</label>
-          <input type="password" id="new-pw" placeholder="New password" style="width:100%;padding:8px 12px;font-size:13px;font-family:'DM Sans',sans-serif;border:1px solid var(--border-strong);border-radius:var(--radius);background:var(--parchment)">
+          <input type="password" id="new-pw" placeholder="Min. 8 characters" style="width:100%;padding:8px 12px;font-size:13px;font-family:'DM Sans',sans-serif;border:1px solid var(--border-strong);border-radius:var(--radius);background:var(--parchment)">
         </div>
-        <button class="btn-save" onclick="changePw()">Update</button>
+        <div>
+          <label style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-muted);display:block;margin-bottom:5px">Confirm password</label>
+          <input type="password" id="confirm-pw" placeholder="Repeat password" style="width:100%;padding:8px 12px;font-size:13px;font-family:'DM Sans',sans-serif;border:1px solid var(--border-strong);border-radius:var(--radius);background:var(--parchment)">
+        </div>
       </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <button class="btn-save" onclick="changePw()">Update password</button>
+        <button class="btn-export" onclick="showCurrentHash()">Show hash for DEFAULT_HASH</button>
+      </div>
+      <div id="hash-display" style="display:none;margin-top:10px;background:var(--ink);color:var(--gold-light);padding:10px 14px;border-radius:var(--radius);font-family:monospace;font-size:12px;word-break:break-all"></div>
     </div>
 
     <div class="export-card" style="margin-top:1rem;border-color:var(--red-border)">
@@ -376,9 +384,11 @@ header { background: var(--ink); border-bottom: 2px solid var(--gold); padding: 
 <div class="toast" id="toast"></div>
 
 <script>
-var ADMIN_PW_KEY = 'sph_admin_pw';
+var ADMIN_HASH_KEY = 'sph_admin_pw_hash';
 var OVERRIDES_KEY = 'sph_sermon_overrides';
-var DEFAULT_PW = 'stpeters2024';
+// SHA-256 hash of default password 'stpeters2024'
+// To generate a new hash: open browser console on this page, run sha256('yournewpassword'), copy the result here
+var DEFAULT_HASH = 'b3d97a31e30b3c57f6985c3eb25d00ab9ea866c5fae49fd48f5bd95a5d93a2d5';
 var RSS_URL = 'https://anchor.fm/s/c1de3e94/podcast/rss';
 var PROXY = 'https://api.allorigins.win/get?url=';
 
@@ -397,14 +407,21 @@ var BIBLE_BOOKS = ['Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshu
   });
 })();
 
-/* ── Auth ── */
-function getStoredPw() {
-  return localStorage.getItem(ADMIN_PW_KEY) || DEFAULT_PW;
+/* ── Auth (SHA-256 hashed) ── */
+async function sha256(str) {
+  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
 }
 
-function doLogin() {
+function getStoredHash() {
+  return localStorage.getItem(ADMIN_HASH_KEY) || DEFAULT_HASH;
+}
+
+async function doLogin() {
   var pw = document.getElementById('pw-input').value;
-  if (pw === getStoredPw()) {
+  if (!pw) return;
+  var hash = await sha256(pw);
+  if (hash === getStoredHash()) {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('admin-screen').style.display = 'block';
     document.getElementById('logout-btn').style.display = '';
@@ -424,12 +441,17 @@ function logout() {
   document.getElementById('pw-input').value = '';
 }
 
-function changePw() {
+async function changePw() {
   var v = document.getElementById('new-pw').value.trim();
+  var c = document.getElementById('confirm-pw').value.trim();
   if (!v) { showToast('Password cannot be empty'); return; }
-  localStorage.setItem(ADMIN_PW_KEY, v);
+  if (v !== c) { showToast('Passwords do not match'); return; }
+  if (v.length < 8) { showToast('Password must be at least 8 characters'); return; }
+  var hash = await sha256(v);
+  localStorage.setItem(ADMIN_HASH_KEY, hash);
   document.getElementById('new-pw').value = '';
-  showToast('Password updated');
+  document.getElementById('confirm-pw').value = '';
+  showToast('Password updated ✓');
 }
 
 /* ── Data ── */
@@ -679,6 +701,15 @@ function importData() {
   } catch(e) {
     showToast('Invalid JSON — ' + e.message);
   }
+}
+
+async function showCurrentHash() {
+  var v = document.getElementById('new-pw').value.trim();
+  if (!v) { showToast('Enter a password first to see its hash'); return; }
+  var hash = await sha256(v);
+  var el = document.getElementById('hash-display');
+  el.style.display = 'block';
+  el.textContent = hash;
 }
 
 function clearAll() {
