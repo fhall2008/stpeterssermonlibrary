@@ -126,6 +126,7 @@ footer .footer-name { color: var(--gold-light); font-weight: 500; }
         <span>Sermon Library</span>
       </div>
     </div>
+    <a href="admin.html" style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.3);text-decoration:none;padding:4px 10px;border:1px solid rgba(255,255,255,0.1);border-radius:3px;transition:all 0.2s" onmouseover="this.style.color='var(--gold-light)';this.style.borderColor='var(--gold)'" onmouseout="this.style.color='rgba(255,255,255,0.3)';this.style.borderColor='rgba(255,255,255,0.1)'">Admin</a>
     <div class="lang-tabs">
       <button class="lang-tab active" onclick="setLang('en')" id="tab-en">English</button>
       <button class="lang-tab inactive-lang" title="Coming soon" id="tab-fa">&#x0641;&#x0627;&#x0631;&#x0633;&#x06CC;</button>
@@ -307,11 +308,56 @@ function parseSermons(xml) {
       book: meta.book, series: meta.series, service: meta.service, topic: meta.topic
     });
   });
-  allSermons = sermons;
-  populateFilters(sermons);
-  updateStats(sermons);
+  allSermons = mergeOverrides(sermons);
+  populateFilters(allSermons);
+  updateStats(allSermons);
   applyFilters();
   setStatus('Feed loaded \u2713', true);
+}
+
+function mergeOverrides(rssList) {
+  var OVERRIDES_KEY = 'sph_sermon_overrides';
+  var overrides = [];
+  try { overrides = JSON.parse(localStorage.getItem(OVERRIDES_KEY)) || []; } catch(e) {}
+  if (!overrides.length) return rssList;
+
+  var overridesByRssId = {};
+  var manualEntries = [];
+  overrides.forEach(function(o) {
+    if (o.rssId) overridesByRssId[o.rssId] = o;
+    else if (o.manual) manualEntries.push(o);
+  });
+
+  var merged = rssList.filter(function(s) {
+    var ov = overridesByRssId['rss_' + s.id];
+    if (!ov) return true;
+    if (ov.hidden) return false;
+    s.title = ov.title || s.title;
+    s.speaker = ov.speaker || s.speaker;
+    s.desc = ov.desc || s.desc;
+    s.book = ov.book || s.book;
+    s.topic = ov.topic || s.topic;
+    s.series = ov.series || s.series;
+    s.service = ov.service || s.service;
+    s.audioUrl = ov.audioUrl || s.audioUrl;
+    if (ov.date) s.parsedDate = new Date(ov.date);
+    return true;
+  });
+
+  manualEntries.forEach(function(o) {
+    if (o.hidden) return;
+    merged.push({
+      id: o.id, title: o.title, desc: o.desc || '',
+      pubDate: o.date, parsedDate: o.date ? new Date(o.date) : new Date(0),
+      audioUrl: o.audioUrl || '', link: '', duration: '',
+      speaker: o.speaker || 'Unknown',
+      book: o.book || '', series: o.series || '',
+      service: o.service || '', topic: o.topic || '',
+      isManual: true
+    });
+  });
+
+  return merged;
 }
 
 function unique(arr) {
