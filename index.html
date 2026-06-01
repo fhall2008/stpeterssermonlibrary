@@ -79,6 +79,8 @@ header{background:var(--ink);border-bottom:2px solid var(--gold);padding:0 2rem;
 .empty-state h3{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;margin-bottom:0.5rem}
 .empty-state p{font-size:14px;color:var(--ink-muted)}
 .error-box{background:#FEF3F3;border:1px solid #F5CACA;border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem;font-size:14px;color:#8B2020;line-height:1.6}
+.audio-player{display:none;margin-top:1rem;background:var(--parchment-dark);border-radius:var(--radius);padding:0.75rem 1rem;border:1px solid var(--border)}
+.audio-player audio{width:100%;height:36px;display:block;accent-color:var(--gold)}
 .pagination{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:2rem;flex-wrap:wrap}
 .page-btn{padding:6px 12px;font-size:13px;font-family:'DM Sans',sans-serif;background:var(--white);border:1px solid var(--border-strong);border-radius:var(--radius);cursor:pointer;color:var(--ink-muted);transition:all 0.15s;min-width:34px;text-align:center}
 .page-btn:hover{border-color:var(--gold);color:var(--ink)}
@@ -420,9 +422,10 @@ function card(s, first) {
   if (s.book)    tags += '<span class="tag tag-book">'    + esc(s.book)    + '</span>';
   var date = fmtDate(s.parsedDate);
   var dur  = fmtDur(s.duration);
-  var play = s.audioUrl || s.link || '#';
-  return '<div class="sermon-card' + (first ? ' first-card' : '') + '">' +
-    '<div>' +
+  var hasAudio = !!s.audioUrl;
+  var playIcon = '<svg viewBox="0 0 16 16"><path d="M3 2.5l10 5.5-10 5.5V2.5z"/></svg>';
+  return '<div class="sermon-card' + (first ? ' first-card' : '') + '" id="card-' + s.id + '">' +
+    '<div style="flex:1;min-width:0">' +
       (tags ? '<div class="meta-top">' + tags + '</div>' : '') +
       '<div class="sermon-title">' + esc(s.title) + '</div>' +
       '<div class="sermon-info">' +
@@ -431,14 +434,38 @@ function card(s, first) {
         (dur  ? '<span class="dot"></span><span>' + esc(dur) + '</span>' : '') +
       '</div>' +
       (s.desc ? '<div class="sermon-desc">' + esc(s.desc) + '</div>' : '') +
+      (hasAudio ? '<div class="audio-player" id="player-' + s.id + '"><audio controls preload="none" src="' + esc(s.audioUrl) + '"></audio></div>' : '') +
     '</div>' +
     '<div class="sermon-actions">' +
       '<div class="sermon-date">' + date + '</div>' +
-      '<a href="' + esc(play) + '" target="_blank" rel="noopener" class="btn-listen">' +
-        '<svg viewBox="0 0 16 16"><path d="M3 2.5l10 5.5-10 5.5V2.5z"/></svg>Listen' +
-      '</a>' +
+      (hasAudio
+        ? '<button class="btn-listen" onclick="togglePlayer(' + s.id + ',this)">' + playIcon + 'Listen</button>'
+        : '<a href="' + esc(s.link || '#') + '" target="_blank" rel="noopener" class="btn-listen">' + playIcon + 'Listen</a>') +
     '</div>' +
   '</div>';
+}
+
+function togglePlayer(id, btn) {
+  var player = document.getElementById('player-' + id);
+  if (!player) return;
+  var isOpen = player.style.display === 'block';
+  document.querySelectorAll('.audio-player').forEach(function(p) {
+    if (p !== player) {
+      p.style.display = 'none';
+      var a = p.querySelector('audio'); if (a) a.pause();
+      var b = p.closest('.sermon-card').querySelector('.btn-listen');
+      if (b) b.innerHTML = '<svg viewBox="0 0 16 16"><path d="M3 2.5l10 5.5-10 5.5V2.5z"/></svg>Listen';
+    }
+  });
+  if (isOpen) {
+    player.style.display = 'none';
+    player.querySelector('audio').pause();
+    btn.innerHTML = '<svg viewBox="0 0 16 16"><path d="M3 2.5l10 5.5-10 5.5V2.5z"/></svg>Listen';
+  } else {
+    player.style.display = 'block';
+    player.querySelector('audio').play();
+    btn.innerHTML = '<svg viewBox="0 0 16 16"><rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/></svg>Pause';
+  }
 }
 
 function render() {
