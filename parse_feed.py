@@ -155,7 +155,10 @@ for idx, item in enumerate(channel_el.findall('item')):
 
     enc       = item.find('enclosure')
     audio_url = enc.get('url', '') if enc is not None else ''
-    desc      = re.sub(r'<[^>]+>', '', gi('summary') or gt('description')).strip()
+    # Keep raw HTML so the browser can parse structured fields (Speaker:, Series:, Service:)
+    raw_desc  = gi('summary') or gt('description')
+    desc      = re.sub(r'<[^>]+>', ' ', raw_desc).strip()
+    raw_html  = raw_desc  # passed to feed.json for JS extraction
     duration  = gi('duration')
     ep_img    = item.find('itunes:image', NS)
     image     = ep_img.get('href', '') if ep_img is not None else ''
@@ -175,7 +178,7 @@ for idx, item in enumerate(channel_el.findall('item')):
         'desc': desc, 'pubDate': gt('pubDate'),
         'audioUrl': audio_url, 'link': gt('link'),
         'duration': duration, 'speaker': gi('author'),
-        'image': image, 'videoUrl': video_url, 'videoId': video_id,
+        'image': image, 'videoUrl': video_url, 'videoId': video_id, 'rawHtml': raw_html,
     })
 
 output = {
