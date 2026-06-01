@@ -282,12 +282,13 @@ function findBook(text) {
 }
 
 function extractMeta(text) {
-  // Strip HTML tags, decode entities, then match "Label: Value" lines
-  var c = text.replace(/<[^>]+>/g, '\n').replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ').replace(/&#\d+;/g, ' ');
+  // Replace HTML tags with newlines to preserve line structure, then match Label: Value
+  var c = text.replace(/<\/p>/gi, '\n').replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ');
   function field() {
     var keys = Array.prototype.slice.call(arguments);
     for (var k = 0; k < keys.length; k++) {
-      var re = new RegExp('(?:^|\\n)\\s*' + keys[k] + '\\s*:\\s*(.+)', 'i');
+      // Match "Key: Value" up to end of line only
+      var re = new RegExp('^\\s*' + keys[k] + '\\s*:\\s*(.+)$', 'im');
       var m = c.match(re);
       if (m) return m[1].trim().replace(/\s+/g, ' ').replace(/[.,;]$/, '');
     }
