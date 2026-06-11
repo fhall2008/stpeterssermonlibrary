@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>موعظه‌های فارسی — St Peter's Anglican Church Hornsby</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Vazirmatn:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff;--bg2:#f8f8f6;--bg3:#f2f1ee;
+  --text:#0f0f0e;--text2:#5a5955;--text3:#9a9895;
+  --border:#e8e7e3;--border2:#d4d3ce;
+  --accent:#1a1a18;--accent2:#2d2d2a;
+  --red:#b91c1c;--red-bg:#fef2f2;
+  --radius:8px;--radius-lg:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Vazirmatn','Inter',system-ui,sans-serif;background:var(--bg2);color:var(--text);min-height:100vh;font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+nav{background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo img{height:36px;width:auto;display:block}
+.nav-back{font-size:13px;color:var(--text2);text-decoration:none;display:flex;align-items:center;gap:5px;transition:color 0.15s;font-family:'Inter',sans-serif}
+.nav-back:hover{color:var(--text)}
+.nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
+.stats-bar{background:var(--bg);border-bottom:1px solid var(--border);padding:0 2rem}
+.stats-inner{max-width:1280px;margin:0 auto;height:44px;display:flex;align-items:center;gap:1.5rem}
+.stat{font-size:13px;color:var(--text2)}.stat strong{color:var(--text);font-weight:500}
+.stat-div{width:1px;height:12px;background:var(--border)}
+#feed-status{font-size:12px;color:var(--text3);margin-right:auto;display:flex;align-items:center;gap:6px}
+.spinner{width:11px;height:11px;border:1.5px solid var(--border2);border-top-color:var(--text3);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.layout{max-width:900px;margin:0 auto;padding:2rem}
+.sermon-grid{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+.sermon-card{background:var(--bg);padding:1.25rem 1.5rem;display:flex;gap:1rem;align-items:flex-start;transition:background 0.1s}
+.sermon-card:hover{background:#fafaf8}
+.sermon-card.latest{border-top:2px solid var(--accent)}
+.sermon-art{width:64px;height:64px;border-radius:var(--radius);object-fit:cover;flex-shrink:0;background:var(--bg3)}
+.sermon-body{flex:1;min-width:0}
+.sermon-title{font-size:17px;font-weight:500;color:var(--text);line-height:1.4;margin-bottom:4px}
+.sermon-meta{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2);flex-wrap:wrap}
+.sermon-meta .speaker{font-weight:500;color:var(--text)}
+.dot{width:3px;height:3px;border-radius:50%;background:var(--border2);flex-shrink:0}
+.sermon-desc{font-size:13px;color:var(--text2);margin-top:6px;line-height:1.65;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.audio-player{display:none;margin-top:10px;background:var(--bg3);border-radius:var(--radius);padding:10px 12px;border:1px solid var(--border)}
+.audio-player audio{width:100%;height:32px;display:block;accent-color:var(--accent)}
+.sermon-side{display:flex;flex-direction:column;align-items:flex-start;gap:7px;flex-shrink:0;min-width:80px}
+.sermon-date{font-size:12px;color:var(--text3);white-space:nowrap;font-family:'Inter',sans-serif}
+.btn-listen{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;background:var(--accent);color:#fff;font-size:12px;font-weight:500;font-family:'Vazirmatn','Inter',sans-serif;border:none;border-radius:var(--radius);cursor:pointer;text-decoration:none;transition:background 0.15s;white-space:nowrap}
+.btn-listen:hover{background:var(--accent2)}
+.btn-listen svg{width:11px;height:11px;fill:#fff;flex-shrink:0}
+.empty-state{text-align:center;padding:4rem 2rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg)}
+.empty-state h3{font-size:22px;font-weight:400;margin-bottom:6px}
+.empty-state p{font-size:14px;color:var(--text2)}
+.error-box{background:var(--red-bg);border:1px solid #fecaca;border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem;font-size:14px;color:var(--red);line-height:1.6}
+.pagination{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:1.5rem;flex-wrap:wrap}
+.page-btn{padding:6px 12px;font-size:13px;font-family:'Inter',sans-serif;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;color:var(--text2);transition:all 0.15s;min-width:34px;text-align:center}
+.page-btn:hover{border-color:var(--border2);color:var(--text)}
+.page-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.page-btn:disabled{opacity:0.35;cursor:not-allowed}
+footer{border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;margin-top:3rem;background:var(--bg)}
+footer p{font-size:12px;color:var(--text3);font-family:'Inter',sans-serif}
+footer img{height:20px;width:auto;vertical-align:middle;opacity:0.4;margin-left:6px}
+@media(max-width:600px){
+  .nav-inner{padding:0 1rem}
+  .layout{padding:1rem}
+  .sermon-card{padding:1rem;flex-wrap:wrap;gap:0.75rem}
+  .sermon-art{width:52px;height:52px}
+  .sermon-side{flex-direction:row;align-items:center;width:100%;justify-content:space-between;padding-top:0.5rem;border-top:1px solid var(--border)}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html"><img src="logo.png" alt="St Peter's Anglican Church Hornsby"></a>
+    <a href="index.html" class="nav-back">
+      همه زبان‌ها
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</nav>
+
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat"><strong id="total-count">—</strong> موعظه</div>
+    <div id="feed-status">
+      <div class="spinner" id="spinner"></div>
+      <span id="status-text">در حال بارگذاری…</span>
+    </div>
+  </div>
+</div>
+
+<div class="layout">
+  <div id="error-area"></div>
+  <div id="sermon-list"></div>
+  <div class="pagination" id="pagination"></div>
+</div>
+
+<footer>
+  <p>کلیسای انگلیکن سنت پیتر هورنزبی <img src="logo.png" alt=""></p>
+</footer>
+
+<script>
+var FEED_JSON = 'feed-fa.json';
+var PER_PAGE = 15;
+var allSermons = [], currentPage = 1;
+var channelImage = '';
+
+async function loadFeed() {
+  try {
+    var res = await fetch(FEED_JSON + '?t=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    var data = await res.json();
+    if (data.channelImage) channelImage = data.channelImage;
+    parseAndRender(data.items);
+    document.getElementById('spinner').style.display = 'none';
+    document.getElementById('status-text').textContent = '';
+  } catch(e) {
+    document.getElementById('spinner').style.display = 'none';
+    document.getElementById('status-text').textContent = 'خطا در بارگذاری';
+    document.getElementById('error-area').innerHTML = '<div class="error-box">بارگذاری موعظه‌ها ممکن نشد. لطفاً GitHub Action را اجرا کنید.</div>';
+  }
+}
+
+function extractMeta(text) {
+  var c = text.replace(/<\/p>/gi,'\n').replace(/<br\s*\/?>/gi,'\n').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').replace(/&nbsp;/g,' ');
+  function field() {
+    var keys = Array.prototype.slice.call(arguments);
+    for (var k = 0; k < keys.length; k++) {
+      var m = c.match(new RegExp('^\\s*' + keys[k] + '\\s*:\\s*(.+)$','im'));
+      if (m) return m[1].trim().replace(/\s+/g,' ').replace(/[.,;]$/,'');
+    }
+    return '';
+  }
+  return { speaker: field('speaker','واعظ'), series: field('series','سری'), service: field('service','礼拝') };
+}
+
+function parseAndRender(items) {
+  allSermons = items.map(function(item) {
+    var meta = extractMeta(item.rawHtml || item.desc || '');
+    return {
+      id: item.id, title: item.title || '',
+      desc: item.desc || '',
+      pubDate: item.pubDate, parsedDate: item.pubDate ? new Date(item.pubDate) : new Date(0),
+      audioUrl: item.audioUrl || '', link: item.link || '', duration: item.duration || '',
+      speaker: item.speaker || meta.speaker || '',
+      series: item.titleSeries || meta.series || '',
+      service: meta.service || '',
+      image: item.image || ''
+    };
+  });
+  allSermons.sort(function(a,b){ return b.parsedDate - a.parsedDate; });
+  document.getElementById('total-count').textContent = allSermons.length;
+  renderPage();
+}
+
+function fmtDate(d) {
+  if (!d || !(d instanceof Date) || isNaN(d) || d.getFullYear() < 2000) return '';
+  return d.toLocaleDateString('fa-IR');
+}
+function fmtDur(s) {
+  if (!s) return '';
+  if (s.indexOf(':') > -1) return s;
+  var n = parseInt(s); if (isNaN(n)) return '';
+  return Math.floor(n/60) + ':' + String(n%60).padStart(2,'0');
+}
+function esc(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : ''; }
+
+function card(s, first) {
+  var date = fmtDate(s.parsedDate), dur = fmtDur(s.duration);
+  var hasAudio = !!s.audioUrl;
+  var playIcon  = '<svg viewBox="0 0 16 16"><path d="M13 13.5L3 8 13 2.5V13.5z"/></svg>';
+  var pauseIcon = '<svg viewBox="0 0 16 16"><rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/></svg>';
+  var img = s.image || channelImage;
+  return '<div class="sermon-card' + (first ? ' latest' : '') + '" id="card-' + s.id + '">' +
+    (img ? '<img class="sermon-art" src="' + esc(img) + '" alt="" loading="lazy">' : '') +
+    '<div class="sermon-body">' +
+      '<div class="sermon-title">' + esc(s.title) + '</div>' +
+      '<div class="sermon-meta">' +
+        (s.speaker ? '<span class="speaker">' + esc(s.speaker) + '</span>' : '') +
+        (date ? '<span class="dot"></span><span>' + date + '</span>' : '') +
+        (dur  ? '<span class="dot"></span><span>' + esc(dur) + '</span>' : '') +
+      '</div>' +
+      (s.desc ? '<div class="sermon-desc">' + esc(s.desc) + '</div>' : '') +
+      (hasAudio ? '<div class="audio-player" id="player-' + s.id + '"><audio controls preload="none" src="' + esc(s.audioUrl) + '"></audio></div>' : '') +
+    '</div>' +
+    '<div class="sermon-side">' +
+      '<div class="sermon-date">' + date + '</div>' +
+      (hasAudio
+        ? '<button class="btn-listen" id="btn-' + s.id + '" onclick="togglePlayer(\'' + s.id + '\',this)">' + playIcon + 'پخش</button>'
+        : (s.link ? '<a href="' + esc(s.link) + '" target="_blank" rel="noopener" class="btn-listen">' + playIcon + 'پخش</a>' : '')) +
+    '</div>' +
+  '</div>';
+}
+
+function togglePlayer(id, btn) {
+  var player = document.getElementById('player-' + id);
+  if (!player) return;
+  var isOpen = player.style.display === 'block';
+  var playIcon = '<svg viewBox="0 0 16 16"><path d="M13 13.5L3 8 13 2.5V13.5z"/></svg>';
+  var pauseIcon = '<svg viewBox="0 0 16 16"><rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/></svg>';
+  document.querySelectorAll('.audio-player').forEach(function(p) {
+    if (p !== player && p.style.display === 'block') {
+      p.style.display = 'none';
+      var a = p.querySelector('audio'); if (a) a.pause();
+      var pid = p.id.replace('player-','');
+      var ob = document.getElementById('btn-' + pid);
+      if (ob) ob.innerHTML = playIcon + 'پخش';
+    }
+  });
+  if (isOpen) {
+    player.style.display = 'none';
+    var a = player.querySelector('audio'); if (a) a.pause();
+    btn.innerHTML = playIcon + 'پخش';
+  } else {
+    player.style.display = 'block';
+    var a = player.querySelector('audio');
+    if (a) { var p = a.play(); if (p && p.catch) p.catch(function(){}); }
+    btn.innerHTML = pauseIcon + 'توقف';
+  }
+}
+
+function renderPage() {
+  var list = document.getElementById('sermon-list');
+  var pag  = document.getElementById('pagination');
+  var total = allSermons.length, pages = Math.max(1, Math.ceil(total/PER_PAGE));
+  var start = (currentPage-1)*PER_PAGE, page = allSermons.slice(start, start+PER_PAGE);
+  if (!total) {
+    list.innerHTML = '<div class="empty-state"><h3>موعظه‌ای یافت نشد</h3><p>لطفاً بعداً مراجعه کنید.</p></div>';
+    pag.innerHTML = ''; return;
+  }
+  list.innerHTML = '<div class="sermon-grid">' + page.map(function(s,i){ return card(s, i===0 && currentPage===1); }).join('') + '</div>';
+  renderPag(pages);
+}
+
+function renderPag(pages) {
+  var pag = document.getElementById('pagination');
+  if (pages <= 1) { pag.innerHTML = ''; return; }
+  var h = '<button class="page-btn" onclick="goPage(' + (currentPage-1) + ')"' + (currentPage===1?' disabled':'') + '>قبلی</button>';
+  for (var i = 1; i <= pages; i++) {
+    if (pages > 7 && i > 2 && i < pages-1 && Math.abs(i-currentPage) > 1) {
+      if (i===3||i===pages-2) h += '<span style="padding:6px 4px;color:var(--text3)">…</span>';
+      continue;
+    }
+    h += '<button class="page-btn' + (i===currentPage?' active':'') + '" onclick="goPage('+i+')">' + i + '</button>';
+  }
+  h += '<button class="page-btn" onclick="goPage(' + (currentPage+1) + ')"' + (currentPage===pages?' disabled':'') + '>بعدی</button>';
+  pag.innerHTML = h;
+}
+
+function goPage(n) {
+  var pages = Math.ceil(allSermons.length/PER_PAGE);
+  if (n<1||n>pages) return;
+  currentPage = n; renderPage();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+loadFeed();
+</script>
+</body>
+</html>
