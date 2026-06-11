@@ -21,7 +21,7 @@ html{scroll-behavior:smooth}
 body{font-family:'Vazirmatn','Inter',system-ui,sans-serif;background:var(--bg2);color:var(--text);min-height:100vh;font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
 nav{background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
 .nav-inner{max-width:1280px;margin:0 auto;padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between}
-.nav-logo img{height:36px;width:auto;display:block}
+.nav-logo img{height:36px;width:auto;display:block;max-width:160px;object-fit:contain}
 .nav-back{font-size:13px;color:var(--text2);text-decoration:none;display:flex;align-items:center;gap:5px;transition:color 0.15s;font-family:'Inter',sans-serif}
 .nav-back:hover{color:var(--text)}
 .nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
@@ -62,7 +62,7 @@ nav{background:var(--bg);border-bottom:1px solid var(--border);position:sticky;t
 .page-btn:disabled{opacity:0.35;cursor:not-allowed}
 footer{border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;margin-top:3rem;background:var(--bg)}
 footer p{font-size:12px;color:var(--text3);font-family:'Inter',sans-serif}
-footer img{height:20px;width:auto;vertical-align:middle;opacity:0.4;margin-left:6px}
+footer img{height:20px;width:auto;max-width:100px;vertical-align:middle;opacity:0.4;margin-left:6px;object-fit:contain}
 @media(max-width:600px){
   .nav-inner{padding:0 1rem}
   .layout{padding:1rem}
@@ -71,12 +71,15 @@ footer img{height:20px;width:auto;vertical-align:middle;opacity:0.4;margin-left:
   .sermon-side{flex-direction:row;align-items:center;width:100%;justify-content:space-between;padding-top:0.5rem;border-top:1px solid var(--border)}
 }
 </style>
+  <!-- Capacitor -->
+  <script src="capacitor.js"></script>
+  <script src="capacitor-bridge.js"></script>
 </head>
 <body>
 
 <nav>
   <div class="nav-inner">
-    <a href="index.html"><img src="logo.png" alt="St Peter's Anglican Church Hornsby"></a>
+    <a href="index.html" class="nav-logo"><img src="logo.png" alt="St Peter's Anglican Church Hornsby"></a>
     <a href="index.html" class="nav-back">
       همه زبان‌ها
       <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
