@@ -8,716 +8,79 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
 <style>
-:root {
+:root{
   --bg:#ffffff;--bg2:#f8f8f6;--bg3:#f2f1ee;
   --text:#0f0f0e;--text2:#5a5955;--text3:#9a9895;
   --border:#e8e7e3;--border2:#d4d3ce;
-  --accent:#1a1a18;--accent2:#2d2d2a;
-  --blue:#1d4ed8;--blue-bg:#eff6ff;--blue-text:#1e40af;
-  --green:#15803d;--green-bg:#f0fdf4;--green-text:#166534;
-  --amber:#b45309;--amber-bg:#fffbeb;--amber-text:#92400e;
-  --red:#b91c1c;--red-bg:#fef2f2;
-  --radius:8px;--radius-lg:12px;--radius-xl:16px;
+  --accent:#1a1a18;--radius:8px;--radius-lg:12px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg2);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
-
-/* Nav */
-nav{background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-.nav-inner{max-width:1280px;margin:0 auto;padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg2);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+nav{background:var(--bg);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:900px;margin:0 auto;padding:0 2rem;height:60px;display:flex;align-items:center}
 .nav-logo img{height:36px;width:auto;display:block}
-.nav-right{display:flex;align-items:center;gap:8px}
-
-.lang-tabs{display:flex;background:var(--bg3);border-radius:var(--radius);padding:3px;gap:2px}
-.lang-tab{padding:5px 14px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text2);border:none;background:none;border-radius:6px;cursor:pointer;transition:all 0.15s;font-weight:400}
-.lang-tab.active{background:var(--bg);color:var(--text);font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
-.lang-tab.soon{opacity:0.4;cursor:not-allowed}
-
-/* Stats bar */
-.stats-bar{background:var(--bg);border-bottom:1px solid var(--border);padding:0 2rem}
-.stats-inner{max-width:1280px;margin:0 auto;height:44px;display:flex;align-items:center;gap:1.5rem}
-.stat{font-size:13px;color:var(--text2)}.stat strong{color:var(--text);font-weight:500}
-.stat-div{width:1px;height:12px;background:var(--border)}
-#feed-status{font-size:12px;color:var(--text3);margin-left:auto;display:flex;align-items:center;gap:6px}
-.spinner{width:11px;height:11px;border:1.5px solid var(--border2);border-top-color:var(--text3);border-radius:50%;animation:spin 0.8s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* Layout */
-.layout{max-width:1280px;margin:0 auto;padding:2rem;display:grid;grid-template-columns:256px 1fr;gap:1.5rem;align-items:start}
-
-/* Sidebar */
-.sidebar{position:sticky;top:72px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
-.sidebar-head{padding:1rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.sidebar-head span{font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3)}
-#clear-btn{font-size:12px;color:var(--blue);background:none;border:none;cursor:pointer;font-family:inherit;padding:0}
-#clear-btn:hover{text-decoration:underline}
-.search-wrap{padding:0.875rem 1rem;border-bottom:1px solid var(--border)}
-.search-wrap input{width:100%;padding:7px 10px 7px 32px;font-size:13px;font-family:'Inter',sans-serif;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%239a9895' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 10px center;color:var(--text);outline:none;transition:border 0.15s}
-.search-wrap input:focus{border-color:var(--accent);background:var(--bg)}
-.search-wrap input::placeholder{color:var(--text3)}
-.filter-group{border-bottom:1px solid var(--border);padding:0.875rem 1rem}
-.filter-group:last-child{border-bottom:none}
-.filter-label{font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
-.filter-group select{width:100%;padding:7px 28px 7px 10px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);background:var(--bg2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239a9895' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 9px center;border:1px solid var(--border);border-radius:var(--radius);appearance:none;cursor:pointer;outline:none;transition:border 0.15s}
-.filter-group select:focus{border-color:var(--accent);background:var(--bg)}
-
-/* Content */
-.content{min-width:0}
-.results-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px}
-.results-count{font-size:13px;color:var(--text2)}.results-count strong{color:var(--text);font-weight:500}
-.sort-wrap{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text2)}
-.sort-wrap select{padding:5px 26px 5px 9px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239a9895' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") no-repeat right 8px center;border:1px solid var(--border);border-radius:var(--radius);appearance:none;cursor:pointer;outline:none}
-
-/* Sermon cards */
-.sermon-grid{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
-.sermon-card{background:var(--bg);padding:1.25rem 1.5rem;display:flex;gap:1rem;align-items:flex-start;transition:background 0.1s}
-.sermon-card:hover{background:#fafaf8}
-.sermon-card.latest{border-top:2px solid var(--accent)}
-.sermon-art{width:64px;height:64px;border-radius:var(--radius);object-fit:cover;flex-shrink:0;background:var(--bg3)}
-.sermon-body{flex:1;min-width:0}
-.tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px}
-.tag{font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px;white-space:nowrap;letter-spacing:0.02em}
-.tag-series{background:#f0f0ee;color:#444;border:1px solid #e0e0dc}
-.tag-service{background:var(--blue-bg);color:var(--blue-text);border:1px solid #dbeafe}
-.tag-book{background:var(--green-bg);color:var(--green-text);border:1px solid #dcfce7}
-.sermon-title{font-family:'Fraunces',Georgia,serif;font-size:17px;font-weight:400;color:var(--text);line-height:1.3;margin-bottom:4px}
-.sermon-meta{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text2);flex-wrap:wrap}
-.sermon-meta .speaker{font-weight:500;color:var(--text)}
-.dot{width:3px;height:3px;border-radius:50%;background:var(--border2);flex-shrink:0}
-.sermon-desc{font-size:13px;color:var(--text2);margin-top:6px;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.audio-player{display:none;margin-top:10px;background:var(--bg3);border-radius:var(--radius);padding:10px 12px;border:1px solid var(--border)}
-.audio-player audio{width:100%;height:32px;display:block;accent-color:var(--accent)}
-.video-player{display:none;margin-top:10px;border-radius:var(--radius);overflow:hidden;background:#000;aspect-ratio:16/9}
-.video-player iframe{width:100%;height:100%;display:block;border:none}
-.sermon-side{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0;min-width:80px}
-.sermon-date{font-size:12px;color:var(--text3);white-space:nowrap}
-.btn-listen{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;background:var(--accent);color:#fff;font-size:12px;font-weight:500;font-family:'Inter',sans-serif;border:none;border-radius:var(--radius);cursor:pointer;text-decoration:none;transition:background 0.15s;white-space:nowrap}
-.btn-listen:hover{background:var(--accent2)}
-.btn-listen svg{width:11px;height:11px;fill:#fff;flex-shrink:0}
-.btn-watch{background:#1a1a1a!important}
-.btn-watch:hover{background:#333!important}
-
-/* Empty / Error */
-.empty-state{text-align:center;padding:4rem 2rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg)}
-.empty-state h3{font-family:'Fraunces',serif;font-size:22px;font-weight:300;margin-bottom:6px;color:var(--text)}
-.empty-state p{font-size:14px;color:var(--text2)}
-.error-box{background:var(--red-bg);border:1px solid #fecaca;border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem;font-size:14px;color:var(--red);line-height:1.6}
-.manual-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-top:0.75rem}
-.manual-box p{font-size:13px;color:var(--text2);margin-bottom:0.75rem;line-height:1.6}
-.manual-box textarea{width:100%;height:80px;padding:8px;font-family:monospace;font-size:12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg2);color:var(--text);resize:vertical;display:block;outline:none}
-.manual-box textarea:focus{border-color:var(--accent)}
-.manual-box button{margin-top:8px;padding:7px 16px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-family:'Inter',sans-serif;font-size:13px;cursor:pointer}
-
-/* Pagination */
-.pagination{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:1.5rem;flex-wrap:wrap}
-.page-btn{padding:6px 12px;font-size:13px;font-family:'Inter',sans-serif;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;color:var(--text2);transition:all 0.15s;min-width:34px;text-align:center}
-.page-btn:hover{border-color:var(--border2);color:var(--text)}
-.page-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.page-btn:disabled{opacity:0.35;cursor:not-allowed}
-
-/* Farsi placeholder */
-.farsi-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:4rem 2rem;text-align:center}
-.farsi-box h3{font-family:'Fraunces',serif;font-size:26px;font-weight:300;margin-bottom:6px}
-.farsi-box p{font-size:15px;color:var(--text2);max-width:380px;margin:0 auto;line-height:1.6}
-
-/* Footer */
-footer{border-top:1px solid var(--border);padding:2rem;text-align:center;margin-top:3rem;background:var(--bg)}
+.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem 2rem;text-align:center}
+.hero-eyebrow{font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:1rem}
+.hero h1{font-family:'Fraunces',Georgia,serif;font-size:clamp(32px,5vw,52px);font-weight:300;color:var(--text);line-height:1.15;margin-bottom:0.75rem}
+.hero h1 em{font-style:italic;color:var(--text2)}
+.hero p{font-size:16px;color:var(--text2);max-width:440px;line-height:1.6;margin-bottom:3rem}
+.cards{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;width:100%;max-width:700px}
+.lang-card{flex:1;min-width:240px;max-width:320px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;text-align:left;text-decoration:none;color:var(--text);transition:all 0.2s;position:relative;overflow:hidden}
+.lang-card:hover{border-color:var(--border2);box-shadow:0 4px 20px rgba(0,0,0,0.07);transform:translateY(-2px)}
+.lang-card-flag{font-size:32px;margin-bottom:1rem;display:block}
+.lang-card h2{font-family:'Fraunces',serif;font-size:22px;font-weight:400;margin-bottom:0.35rem}
+.lang-card p{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:1.25rem}
+.lang-card-cta{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--accent)}
+.lang-card-cta svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;transition:transform 0.15s}
+.lang-card:hover .lang-card-cta svg{transform:translateX(3px)}
+.lang-card-rtl{direction:rtl;text-align:right}
+.lang-card-rtl .lang-card-cta{flex-direction:row-reverse}
+.lang-card-rtl:hover .lang-card-cta svg{transform:translateX(-3px)}
+footer{border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;background:var(--bg)}
 footer p{font-size:12px;color:var(--text3)}
-footer img{height:24px;width:auto;vertical-align:middle;opacity:0.45;margin-right:8px}
-
-/* ── Subscribe ── */
-.subscribe-section{padding:1rem;border-top:1px solid var(--border)}
-.subscribe-label{font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
-.subscribe-btn{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--radius);border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:13px;font-family:'Inter',sans-serif;text-decoration:none;margin-bottom:6px;transition:all 0.15s;cursor:pointer;width:100%}
-.subscribe-btn:last-child{margin-bottom:0}
-.subscribe-btn:hover{background:var(--bg3);border-color:var(--border2)}
-.subscribe-btn svg,.subscribe-btn img{width:18px;height:18px;flex-shrink:0;border-radius:3px}
-.subscribe-btn span{font-weight:400;flex:1}
-
-/* ── Mobile ── */
-@media(max-width:900px){
-  .nav-inner{padding:0 1rem}
-  .admin-link{display:none}
-  .layout{grid-template-columns:1fr;padding:0;gap:0}
-  .sidebar{position:static;border-radius:0;border-left:none;border-right:none;border-top:none;display:none}
-  .sidebar.open{display:block}
-  .content{padding:1rem}
-  .stats-inner{gap:1rem}
-  .stat-div:last-of-type{display:none}
-  #feed-status{display:none}
-}
-@media(max-width:600px){
-  .nav-logo img{height:30px}
-  .lang-tab{padding:4px 10px;font-size:12px}
-  .stats-bar{padding:0 1rem}
-  .stats-inner{gap:0.75rem}
-  .sermon-card{padding:1rem;gap:0.75rem;flex-wrap:wrap}
-  .sermon-art{width:52px;height:52px}
-  .sermon-title{font-size:15px}
-  .sermon-side{flex-direction:row;align-items:center;justify-content:space-between;width:100%;min-width:0;padding-top:0.5rem;border-top:1px solid var(--border);margin-top:0.25rem}
-  .sermon-date{font-size:11px}
-  .btn-listen{padding:7px 12px;font-size:12px}
-  .results-bar{gap:6px}
-  .sort-wrap select{font-size:12px}
-  .pagination{gap:3px}
-  .page-btn{padding:5px 9px;font-size:12px;min-width:30px}
-}
+footer img{height:20px;width:auto;vertical-align:middle;opacity:0.4;margin-right:6px}
+@media(max-width:500px){.cards{flex-direction:column;align-items:center}.lang-card{max-width:100%;width:100%}}
 </style>
 </head>
 <body>
 
 <nav>
   <div class="nav-inner">
-    <a href="index.html" class="nav-logo">
-      <img src="logo.png" alt="St Peter's Anglican Church Hornsby">
-    </a>
-    <div class="nav-right">
-      <div class="lang-tabs">
-        <button class="lang-tab active" onclick="setLang('en')" id="tab-en">English</button>
-        <button class="lang-tab" onclick="setLang('fa')" id="tab-fa">&#x0641;&#x0627;&#x0631;&#x0633;&#x06CC;</button>
-      </div>
-    </div>
+    <a href="index.html"><img src="logo.png" alt="St Peter's Anglican Church Hornsby" style="height:36px"></a>
   </div>
 </nav>
 
-<div class="stats-bar">
-  <div class="stats-inner">
-    <div class="stat"><strong id="total-count">—</strong> sermons</div>
-    <div class="stat-div"></div>
-    <div class="stat"><strong id="speaker-count">—</strong> speakers</div>
-    <div class="stat-div"></div>
-    <div class="stat"><strong id="series-count">—</strong> series</div>
-    <div id="feed-status">
-      <div class="spinner" id="spinner"></div>
-      <span id="status-text">Loading…</span>
-    </div>
-  </div>
-</div>
+<div class="hero">
+  <p class="hero-eyebrow">St Peter's Anglican Church Hornsby</p>
+  <h1>Sermon <em>Library</em></h1>
+  <p>Listen to and watch sermons from our Sunday services. Available in English and Farsi.</p>
 
-<div id="mobile-filter-bar" style="display:none">
-  <button onclick="toggleFilters()" id="filter-toggle" style="width:100%;padding:10px 1rem;background:var(--bg);border:none;border-bottom:1px solid var(--border);border-top:1px solid var(--border);font-size:13px;font-family:'Inter',sans-serif;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:space-between;text-align:left">
-    <span style="display:flex;align-items:center;gap:8px">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
-      Filter sermons
-    </span>
-    <span id="filter-arrow" style="font-size:11px;color:var(--text3)">&#9660;</span>
-  </button>
-</div>
+  <div class="cards">
+    <a href="en.html" class="lang-card">
+      <span class="lang-card-flag">🇦🇺</span>
+      <h2>English Sermons</h2>
+      <p>Sunday messages preached at St Peter's Hornsby. Filter by speaker, series, book of the Bible and more.</p>
+      <span class="lang-card-cta">
+        Browse sermons
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </span>
+    </a>
 
-<div id="view-en">
-  <div class="layout">
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-head">
-        <span>Filters</span>
-        <button id="clear-btn" onclick="clearFilters()">Clear all</button>
-      </div>
-      <div class="search-wrap">
-        <input type="text" id="search-input" placeholder="Search sermons…" oninput="applyFilters()">
-      </div>
-      <div class="filter-group">
-        <div class="filter-label">Speaker</div>
-        <select id="filter-speaker" onchange="applyFilters()"><option value="">All speakers</option></select>
-      </div>
-      <div class="filter-group">
-        <div class="filter-label">Book</div>
-        <select id="filter-book" onchange="applyFilters()"><option value="">All books</option></select>
-      </div>
-      <div class="filter-group">
-        <div class="filter-label">Topic</div>
-        <select id="filter-topic" onchange="applyFilters()"><option value="">All topics</option></select>
-      </div>
-      <div class="filter-group">
-        <div class="filter-label">Series</div>
-        <select id="filter-series" onchange="applyFilters()"><option value="">All series</option></select>
-      </div>
-      <div class="filter-group">
-        <div class="filter-label">Service</div>
-        <select id="filter-service" onchange="applyFilters()"><option value="">All services</option></select>
-      </div>
-      <div class="subscribe-section" id="subscribe-section" style="display:none">
-        <div class="subscribe-label">Subscribe</div>
-        <div id="subscribe-links"></div>
-      </div>
-    </aside>
-
-    <div class="content">
-      <div class="results-bar">
-        <div class="results-count" id="results-count">Loading…</div>
-        <div class="sort-wrap">
-          Sort:
-          <select id="sort-select" onchange="applyFilters()">
-            <option value="newest">Newest first</option>
-            <option value="oldest">Oldest first</option>
-            <option value="title">Title A–Z</option>
-            <option value="speaker">Speaker A–Z</option>
-          </select>
-        </div>
-      </div>
-      <div id="error-area"></div>
-      <div id="sermon-list"></div>
-      <div class="pagination" id="pagination"></div>
-    </div>
-  </div>
-</div>
-
-<div id="view-fa" style="display:none" dir="rtl">
-  <div class="stats-bar" style="direction:ltr">
-    <div class="stats-inner">
-      <div class="stat"><strong id="fa-total-count">—</strong> موعظه</div>
-      <div id="fa-feed-status" style="font-size:12px;color:var(--text3);margin-left:auto;display:flex;align-items:center;gap:6px">
-        <div class="spinner"></div>
-        <span>در حال بارگذاری…</span>
-      </div>
-    </div>
-  </div>
-  <div class="layout" style="grid-template-columns:1fr">
-    <div class="content">
-      <div id="fa-sermon-list"></div>
-    </div>
+    <a href="fa.html" class="lang-card lang-card-rtl">
+      <span class="lang-card-flag">🇮🇷</span>
+      <h2>موعظه‌های فارسی</h2>
+      <p>پیام‌های یکشنبه به زبان فارسی از کلیسای سنت پیتر هورنزبی.</p>
+      <span class="lang-card-cta">
+        مرور موعظه‌ها
+        <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
+      </span>
+    </a>
   </div>
 </div>
 
 <footer>
-  <p><img src="logo.png" alt="">St Peter's Anglican Church Hornsby &nbsp;·&nbsp; Sermon Library</p>
+  <p><img src="logo.png" alt="">St Peter's Anglican Church Hornsby</p>
 </footer>
 
-<script>
-var FEED_JSON = 'feed.json';
-var FEED_JSON_FA = 'feed-fa.json';
-var currentLang = 'en';
-var PER_PAGE = 15;
-var allSermons = [];
-var filtered = [];
-var currentPage = 1;
-
-var BIBLE_BOOKS = ['Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth','1 Samuel','2 Samuel','1 Kings','2 Kings','1 Chronicles','2 Chronicles','Ezra','Nehemiah','Esther','Job','Psalms','Psalm','Proverbs','Ecclesiastes','Song of Solomon','Song of Songs','Isaiah','Jeremiah','Lamentations','Ezekiel','Daniel','Hosea','Joel','Amos','Obadiah','Jonah','Micah','Nahum','Habakkuk','Zephaniah','Haggai','Zechariah','Malachi','Matthew','Mark','Luke','John','Acts','Romans','1 Corinthians','2 Corinthians','Galatians','Ephesians','Philippians','Colossians','1 Thessalonians','2 Thessalonians','1 Timothy','2 Timothy','Titus','Philemon','Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation'];
-
-function setLang(lang) {
-  currentLang = lang;
-  document.getElementById('view-en').style.display = lang === 'en' ? '' : 'none';
-  document.getElementById('view-fa').style.display = lang === 'fa' ? '' : 'none';
-  document.getElementById('tab-en').classList.toggle('active', lang === 'en');
-  document.getElementById('tab-fa').classList.toggle('active', lang === 'fa');
-  if (lang === 'fa' && !faLoaded) loadFeedFa();
-}
-
-var faLoaded = false;
-
-async function loadFeedFa() {
-  setStatusFa('Loading…', false);
-  try {
-    var res = await fetch(FEED_JSON_FA + '?t=' + Date.now());
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    var data = await res.json();
-    faLoaded = true;
-    parseAndRenderFa(data.items, data.channelImage);
-    setStatusFa('Updated ' + fmtUpdated(data.updated), true);
-  } catch(e) {
-    setStatusFa('Load failed', false);
-    document.getElementById('fa-sermon-list').innerHTML =
-      '<div class="error-box">Could not load the Farsi sermon feed. Run the GitHub Action "Fetch Farsi Feed" to generate feed-fa.json.</div>';
-  }
-}
-
-function parseAndRenderFa(items, feedChannelImage) {
-  var faChannelImage = feedChannelImage || '';
-  var sermons = [];
-  items.forEach(function(item) {
-    var title = item.title || '';
-    var series = item.titleSeries || '';
-    var meta = extractMeta(item.rawHtml || item.desc || '');
-    if (!series) series = meta.series;
-    var book = findBook(title) || findBook(series) || findBook(item.desc) || '';
-    sermons.push({
-      id: 'fa_' + item.id, title: title,
-      desc: item.desc || '',
-      pubDate: item.pubDate, parsedDate: item.pubDate ? new Date(item.pubDate) : new Date(0),
-      audioUrl: item.audioUrl || '', link: item.link || '', duration: item.duration || '',
-      speaker: item.speaker || meta.speaker || '',
-      book: book, series: series, service: meta.service, topic: meta.topic,
-      image: item.image || faChannelImage,
-      videoId: item.videoId || '', videoUrl: item.videoUrl || ''
-    });
-  });
-  sermons.sort(function(a,b){ return b.parsedDate - a.parsedDate; });
-  document.getElementById('fa-total-count').textContent = sermons.length;
-  var html = sermons.map(function(s, i){ return card(s, i === 0); }).join('');
-  document.getElementById('fa-sermon-list').innerHTML = '<div class="sermon-grid" dir="rtl">' + html + '</div>';
-}
-
-function setStatusFa(msg, ok) {
-  var el = document.getElementById('fa-feed-status');
-  if (!el) return;
-  el.querySelector('span').textContent = msg;
-  el.querySelector('.spinner').style.display = ok ? 'none' : '';
-}
-
-var SUBSCRIBE_PLATFORMS = [
-  { key:'spotify',      label:'Spotify',        color:'#1DB954', svg:'<svg viewBox="0 0 24 24" fill="#1DB954"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>' },
-  { key:'apple',        label:'Apple Podcasts',  color:'#872EC4', svg:'<svg viewBox="0 0 24 24" fill="#872EC4"><path d="M12 0C5.373 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387-.12-1.102-.227-2.793.048-3.995.25-1.084 1.67-7.088 1.67-7.088s-.427-.854-.427-2.117c0-1.983 1.15-3.465 2.58-3.465 1.216 0 1.807.913 1.807 2.009 0 1.224-.779 3.056-1.182 4.752-.337 1.42.712 2.576 2.113 2.576 2.534 0 4.484-2.67 4.484-6.526 0-3.41-2.452-5.796-5.953-5.796-4.054 0-6.433 3.04-6.433 6.18 0 1.224.47 2.533 1.057 3.25.116.14.133.264.098.406-.107.447-.347 1.42-.394 1.62-.063.26-.21.315-.484.19-1.8-.838-2.924-3.473-2.924-5.59 0-4.547 3.305-8.723 9.532-8.723 5.006 0 8.898 3.567 8.898 8.33 0 4.97-3.133 8.963-7.48 8.963-1.46 0-2.836-.76-3.307-1.655l-.899 3.354c-.325 1.252-1.203 2.82-1.793 3.774C10.076 23.87 11.03 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>' },
-  { key:'youtube',      label:'YouTube',         color:'#FF0000', svg:'<svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>' },
-  { key:'amazon',       label:'Amazon Music',    color:'#00A8E1', svg:'<svg viewBox="0 0 24 24" fill="#00A8E1"><path d="M.026 14.044c0-3.296 2.911-6.198 7.675-6.198 1.062 0 2.059.146 3.01.413V7.7c0-.926-.064-1.388-.577-1.839-.384-.321-.974-.48-1.913-.48-.844 0-1.593.19-2.258.512a12.506 12.506 0 0 0-1.75 1.043L2.8 5.352A11.68 11.68 0 0 1 5.275 3.97C6.24 3.502 7.47 3.2 8.923 3.2c1.88 0 3.28.449 4.206 1.344.894.863 1.23 2.02 1.23 3.62v5.73c0 .734.063 1.34.19 1.818l.062.22H12.15l-.127-.666a5.787 5.787 0 0 1-.094-.862c-.64.588-1.327 1.022-2.065 1.306a6.43 6.43 0 0 1-2.33.42c-1.38 0-2.554-.392-3.357-1.118C3.38 14.24 3 13.291 3 12.182c0-.046.008-.092.009-.138H.026zm3.19-1.498c0 .55.202 1.01.596 1.36.392.35.916.524 1.556.524.877 0 1.683-.282 2.36-.84.677-.558 1.015-1.23 1.015-2.012v-1.286a8.87 8.87 0 0 0-2.47-.34c-.943 0-1.704.218-2.26.65-.556.432-.797 1.013-.797 1.944zM22.2 19.008c-1.72 1.27-4.217 1.944-6.362 1.944-3.009 0-5.72-1.113-7.766-2.962-.16-.145-.018-.344.176-.23 2.21 1.285 4.942 2.059 7.766 2.059 1.903 0 3.997-.394 5.924-1.21.29-.124.533.19.262.399zm.747-1.25c-.218-.28-1.446-.133-2.002-.066-.167.02-.193-.126-.043-.232.98-.688 2.59-.49 2.778-.26.187.233-.05 1.845-.966 2.614-.141.118-.275.055-.212-.1.206-.514.665-1.674.445-1.957z"/></svg>' },
-  { key:'google',       label:'Google Podcasts', color:'#4285F4', svg:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="#EA4335"/><rect x="10.5" y="2" width="3" height="7" rx="1.5" fill="#4285F4"/><rect x="10.5" y="15" width="3" height="7" rx="1.5" fill="#34A853"/><rect x="2" y="10.5" width="7" height="3" rx="1.5" fill="#FBBC04"/><rect x="15" y="10.5" width="7" height="3" rx="1.5" fill="#EA4335"/></svg>' },
-  { key:'pocketcasts',  label:'Pocket Casts',    color:'#F43E37', svg:'<svg viewBox="0 0 24 24" fill="#F43E37"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm0 2.4c5.302 0 9.6 4.298 9.6 9.6 0 5.303-4.298 9.6-9.6 9.6-5.303 0-9.6-4.297-9.6-9.6 0-5.302 4.297-9.6 9.6-9.6zm0 2.4a7.2 7.2 0 0 0-7.2 7.2 7.2 7.2 0 0 0 7.2 7.2 7.2 7.2 0 0 0 7.2-7.2A7.2 7.2 0 0 0 12 4.8zm0 2.4a4.8 4.8 0 0 1 4.8 4.8 4.8 4.8 0 0 1-4.8 4.8A4.8 4.8 0 0 1 7.2 12 4.8 4.8 0 0 1 12 7.2zm0 2.4a2.4 2.4 0 0 0-2.4 2.4 2.4 2.4 0 0 0 2.4 2.4 2.4 2.4 0 0 0 2.4-2.4A2.4 2.4 0 0 0 12 9.6z"/></svg>' },
-  { key:'overcast',     label:'Overcast',         color:'#FC7E0F', svg:'<svg viewBox="0 0 24 24" fill="#FC7E0F"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 3a7 7 0 0 0-7 7 7 7 0 0 0 7 7 7 7 0 0 0 7-7 7 7 0 0 0-7-7zm0 2a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3zm-4.5 8.5l1-2.6L12 16l3.5 1.5-1.5-3 2.5-1.5-3 .5.5-3-1.5 2.5L12 10l-.5 3-1.5-2.5.5 3-3-.5 2.5 1.5-1.5 3z"/></svg>' },
-  { key:'rss',          label:'RSS Feed',         color:'#F26522', svg:'<svg viewBox="0 0 24 24" fill="#F26522"><path d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19.01 7.38 20 6.18 20C4.98 20 4 19.01 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44m0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z"/></svg>' },
-];
-
-var SUBSCRIBE_KEY = 'sph_subscribe_links';
-
-function loadSubscribeLinks() {
-  var saved = {};
-  try { saved = JSON.parse(localStorage.getItem(SUBSCRIBE_KEY)) || {}; } catch(e) {}
-  var container = document.getElementById('subscribe-links');
-  if (!container) return;
-  var html = '';
-  SUBSCRIBE_PLATFORMS.forEach(function(p) {
-    var url = saved[p.key];
-    if (url) {
-      html += '<a href="' + url + '" target="_blank" rel="noopener" class="subscribe-btn">' +
-        p.svg + '<span>' + p.label + '</span>' +
-        '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>' +
-      '</a>';
-    }
-  });
-  if (html) {
-    document.getElementById('subscribe-section').style.display = '';
-    container.innerHTML = html;
-  }
-}
-
-async function loadFeed() {
-  setStatus('Loading…', false);
-  try {
-    var res = await fetch(FEED_JSON + '?t=' + Date.now());
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    var data = await res.json();
-    parseAndRender(data.items, data.channelImage);
-    setStatus('Updated ' + fmtUpdated(data.updated), true);
-  } catch(e) {
-    setStatus('Load failed', false);
-    showError();
-  }
-}
-
-function fmtUpdated(iso) {
-  if (!iso) return '';
-  return new Date(iso).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});
-}
-
-function showError() {
-  document.getElementById('results-count').textContent = '';
-  document.getElementById('error-area').innerHTML =
-    '<div class="error-box">Could not load the sermon feed. The <code>feed.json</code> file may not exist yet — go to your GitHub repository → Actions → "Fetch Sermon Feed" → Run workflow.</div>';
-}
-
-function findBook(text) {
-  if (!text) return '';
-  var clean = String(text).replace(/<[^>]+>/g, ' ');
-  for (var i = 0; i < BIBLE_BOOKS.length; i++) {
-    var re = new RegExp('\\b' + BIBLE_BOOKS[i].replace(/\s/g, '\\s') + '\\b', 'i');
-    if (re.test(clean)) return BIBLE_BOOKS[i];
-  }
-  return '';
-}
-
-function extractMeta(text) {
-  var c = text.replace(/<\/p>/gi, '\n').replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ');
-  function field() {
-    var keys = Array.prototype.slice.call(arguments);
-    for (var k = 0; k < keys.length; k++) {
-      var re = new RegExp('^\\s*' + keys[k] + '\\s*:\\s*(.+)$', 'im');
-      var m = c.match(re);
-      if (m) return m[1].trim().replace(/\s+/g, ' ').replace(/[.,;]$/, '');
-    }
-    return '';
-  }
-  return {
-    speaker: field('speaker', 'preacher', 'preached by'),
-    series:  field('series'),
-    service: field('service'),
-    topic:   field('topic', 'theme')
-  };
-}
-
-var channelImage = '';
-
-function parseAndRender(items, feedChannelImage) {
-  if (feedChannelImage) channelImage = feedChannelImage;
-  var sermons = [];
-  items.forEach(function(item) {
-    var title = item.title || '';
-    var series = item.titleSeries || '';
-    var meta = extractMeta(item.rawHtml || item.desc || '');
-    if (!series) series = meta.series;
-    var book = findBook(title) || findBook(series) || findBook(item.desc) || findBook(item.speaker) || '';
-    var speaker = item.speaker || meta.speaker || 'Unknown';
-    var service = meta.service;
-    sermons.push({
-      id: item.id, title: title,
-      desc: item.desc || '',
-      pubDate: item.pubDate, parsedDate: item.pubDate ? new Date(item.pubDate) : new Date(0),
-      audioUrl: item.audioUrl || '', link: item.link || '', duration: item.duration || '',
-      speaker: speaker,
-      book: book, series: series, service: service, topic: meta.topic,
-      image: item.image || '',
-      videoId: item.videoId || '',
-      videoUrl: item.videoUrl || ''
-    });
-  });
-
-  allSermons = sermons;
-  populateFilters();
-  document.getElementById('total-count').textContent = sermons.length;
-  document.getElementById('speaker-count').textContent = uniq(sermons.map(function(s){return s.speaker !== 'Unknown' ? s.speaker : '';})).length;
-  document.getElementById('series-count').textContent = uniq(sermons.map(function(s){return s.series;})).length;
-  applyFilters();
-  setStatus('Updated ' + fmtUpdated(''), true);
-}
-
-var BIBLICAL_ORDER = ['Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth','1 Samuel','2 Samuel','1 Kings','2 Kings','1 Chronicles','2 Chronicles','Ezra','Nehemiah','Esther','Job','Psalms','Psalm','Proverbs','Ecclesiastes','Song of Solomon','Song of Songs','Isaiah','Jeremiah','Lamentations','Ezekiel','Daniel','Hosea','Joel','Amos','Obadiah','Jonah','Micah','Nahum','Habakkuk','Zephaniah','Haggai','Zechariah','Malachi','Matthew','Mark','Luke','John','Acts','Romans','1 Corinthians','2 Corinthians','Galatians','Ephesians','Philippians','Colossians','1 Thessalonians','2 Thessalonians','1 Timothy','2 Timothy','Titus','Philemon','Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation'];
-
-function uniq(arr) { return Array.from(new Set(arr.filter(Boolean))).sort(); }
-function countFor(field, val) { return allSermons.filter(function(s){ return s[field] === val; }).length; }
-
-function populateFilters() {
-  var speakers = uniq(allSermons.map(function(s){return s.speaker !== 'Unknown' ? s.speaker : '';}));
-  var books    = allSermons.map(function(s){return s.book;}).filter(Boolean);
-  books = BIBLICAL_ORDER.filter(function(b){ return books.indexOf(b) > -1; });
-  var topics   = uniq(allSermons.map(function(s){return s.topic;}));
-  var series   = uniq(allSermons.map(function(s){return s.series;}));
-  var services = uniq(allSermons.map(function(s){return s.service;}));
-  fillWithCounts('filter-speaker', speakers, 'speaker');
-  fillWithCounts('filter-book',    books,    'book');
-  fillWithCounts('filter-topic',   topics,   'topic');
-  fillWithCounts('filter-series',  series,   'series');
-  fillWithCounts('filter-service', services, 'service');
-}
-
-function fillWithCounts(id, opts, field) {
-  var el = document.getElementById(id), cur = el.value;
-  while (el.options.length > 1) el.remove(1);
-  opts.forEach(function(o){
-    var op = document.createElement('option');
-    op.value = o;
-    op.textContent = o + ' (' + countFor(field, o) + ')';
-    el.appendChild(op);
-  });
-  if (opts.indexOf(cur) > -1) el.value = cur;
-}
-
-function applyFilters() {
-  var sp = document.getElementById('filter-speaker').value;
-  var bk = document.getElementById('filter-book').value;
-  var tp = document.getElementById('filter-topic').value;
-  var sr = document.getElementById('filter-series').value;
-  var sv = document.getElementById('filter-service').value;
-  var q  = document.getElementById('search-input').value.toLowerCase().trim();
-  var so = document.getElementById('sort-select').value;
-  filtered = allSermons.filter(function(s){
-    if (sp && s.speaker !== sp) return false;
-    if (bk && s.book !== bk) return false;
-    if (tp && s.topic !== tp) return false;
-    if (sr && s.series !== sr) return false;
-    if (sv && s.service !== sv) return false;
-    if (q && [s.title,s.speaker,s.desc,s.book,s.series,s.topic].join(' ').toLowerCase().indexOf(q) === -1) return false;
-    return true;
-  });
-  filtered.sort(function(a,b){
-    if (so==='newest') return b.parsedDate - a.parsedDate;
-    if (so==='oldest') return a.parsedDate - b.parsedDate;
-    if (so==='title')  return a.title.localeCompare(b.title);
-    if (so==='speaker') return a.speaker.localeCompare(b.speaker);
-    return 0;
-  });
-  currentPage = 1;
-  render();
-}
-
-function clearFilters() {
-  ['filter-speaker','filter-book','filter-topic','filter-series','filter-service'].forEach(function(id){ document.getElementById(id).value=''; });
-  document.getElementById('search-input').value = '';
-  document.getElementById('sort-select').value = 'newest';
-  applyFilters();
-}
-
-function fmtDate(d) {
-  if (!d || d.getFullYear() < 2000) return '';
-  return d.toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'});
-}
-function fmtDur(s) {
-  if (!s) return '';
-  if (s.indexOf(':') > -1) return s;
-  var n = parseInt(s); if (isNaN(n)) return s;
-  return Math.floor(n/60) + ':' + String(n%60).padStart(2,'0');
-}
-function esc(s) {
-  return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : '';
-}
-
-function card(s, first) {
-  var tags = '';
-  if (s.series)  tags += '<span class="tag tag-series">'  + esc(s.series)  + '</span>';
-  if (s.service) tags += '<span class="tag tag-service">' + esc(s.service) + '</span>';
-  if (s.book)    tags += '<span class="tag tag-book">'    + esc(s.book)    + '</span>';
-  var date = fmtDate(s.parsedDate);
-  var dur  = fmtDur(s.duration);
-  var hasAudio = !!s.audioUrl;
-  var playIcon  = '<svg viewBox="0 0 16 16"><path d="M3 2.5l10 5.5-10 5.5V2.5z"/></svg>';
-  var watchIcon = '<svg viewBox="0 0 20 14" style="fill:#fff;width:13px;height:9px"><path d="M19.5 2.2A2.5 2.5 0 0017.6.3C16.1 0 10 0 10 0S3.9 0 2.4.3A2.5 2.5 0 00.5 2.2 26 26 0 000 7a26 26 0 00.5 4.8 2.5 2.5 0 001.9 1.9C3.9 14 10 14 10 14s6.1 0 7.6-.3a2.5 2.5 0 001.9-1.9A26 26 0 0020 7a26 26 0 00-.5-4.8zM8 10V4l5 3-5 3z"/></svg>';
-  var img = s.image || channelImage;
-  return '<div class="sermon-card' + (first ? ' latest' : '') + '" id="card-' + s.id + '">' +
-    (img ? '<img class="sermon-art" src="' + esc(img) + '" alt="" loading="lazy">' : '') +
-    '<div class="sermon-body">' +
-      (tags ? '<div class="tags">' + tags + '</div>' : '') +
-      '<div class="sermon-title">' + esc(s.title) + '</div>' +
-      '<div class="sermon-meta">' +
-        '<span class="speaker">' + esc(s.speaker) + '</span>' +
-        (date ? '<span class="dot"></span><span>' + date + '</span>' : '') +
-        (dur  ? '<span class="dot"></span><span>' + esc(dur) + '</span>' : '') +
-      '</div>' +
-      (s.desc ? '<div class="sermon-desc">' + esc(s.desc) + '</div>' : '') +
-      (hasAudio ? '<div class="audio-player" id="player-' + s.id + '"><audio controls preload="none" src="' + esc(s.audioUrl) + '"></audio></div>' : '') +
-      (s.videoId ? '<div class="video-player" id="video-' + s.id + '"></div>' : '') +
-    '</div>' +
-    '<div class="sermon-side">' +
-      '<div class="sermon-date">' + date + '</div>' +
-      (hasAudio
-        ? '<button class="btn-listen" id="btn-' + s.id + '" onclick="togglePlayer(\'' + s.id + '\',this)">' + playIcon + 'Listen</button>'
-        : '<a href="' + esc(s.link || '#') + '" target="_blank" rel="noopener" class="btn-listen">' + playIcon + 'Listen</a>') +
-      (s.videoId
-        ? '<button class="btn-listen btn-watch" onclick="toggleVideo(\'' + s.videoId + '\',' + s.id + ',this)">' + watchIcon + 'Watch</button>'
-        : '') +
-    '</div>' +
-  '</div>';
-}
-
-function togglePlayer(id, btn) {
-  var player = document.getElementById('player-' + id);
-  if (!player) return;
-  var isOpen = player.style.display === 'block';
-  var playIcon = '<svg viewBox="0 0 16 16"><path d="M3 2.5l10 5.5-10 5.5V2.5z"/></svg>';
-  var pauseIcon = '<svg viewBox="0 0 16 16"><rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/></svg>';
-  // Close all other open players first
-  document.querySelectorAll('.audio-player').forEach(function(p) {
-    if (p !== player && p.style.display === 'block') {
-      p.style.display = 'none';
-      var a = p.querySelector('audio'); if (a) a.pause();
-      // Find the matching listen button by player id
-      var pid = p.id.replace('player-', '');
-      var ob = document.getElementById('btn-' + pid);
-      if (ob) ob.innerHTML = playIcon + 'Listen';
-    }
-  });
-  if (isOpen) {
-    player.style.display = 'none';
-    var a = player.querySelector('audio'); if (a) a.pause();
-    btn.innerHTML = playIcon + 'Listen';
-  } else {
-    player.style.display = 'block';
-    var a = player.querySelector('audio');
-    if (a) { var p = a.play(); if (p && p.catch) p.catch(function(){}); }
-    btn.innerHTML = pauseIcon + 'Pause';
-  }
-}
-
-function toggleVideo(videoId, id, btn) {
-  var vp = document.getElementById('video-' + id);
-  if (!vp) return;
-  var isOpen = vp.style.display === 'block';
-  document.querySelectorAll('.audio-player').forEach(function(p) {
-    p.style.display = 'none';
-    var a = p.querySelector('audio'); if (a) a.pause();
-    var b = p.closest('.sermon-card').querySelector('.btn-listen');
-    if (b) b.innerHTML = '<svg viewBox="0 0 16 16"><path d="M3 2.5l10 5.5-10 5.5V2.5z"/></svg>Listen';
-  });
-  document.querySelectorAll('.video-player').forEach(function(v) {
-    if (v !== vp) { v.style.display = 'none'; v.innerHTML = ''; }
-    var b = v.closest('.sermon-card') && v.closest('.sermon-card').querySelector('.btn-watch');
-    if (b) b.innerHTML = '<svg viewBox="0 0 16 16" style="fill:#fff"><path d="M6 3.5l7 4.5-7 4.5V3.5z"/></svg>Watch';
-  });
-  if (isOpen) {
-    vp.style.display = 'none';
-    vp.innerHTML = '';
-    btn.innerHTML = '<svg viewBox="0 0 20 14" style="fill:#fff;width:13px;height:9px"><path d="M19.5 2.2A2.5 2.5 0 0017.6.3C16.1 0 10 0 10 0S3.9 0 2.4.3A2.5 2.5 0 00.5 2.2 26 26 0 000 7a26 26 0 00.5 4.8 2.5 2.5 0 001.9 1.9C3.9 14 10 14 10 14s6.1 0 7.6-.3a2.5 2.5 0 001.9-1.9A26 26 0 0020 7a26 26 0 00-.5-4.8zM8 10V4l5 3-5 3z"/></svg>Watch';
-  } else {
-    vp.style.display = 'block';
-    vp.innerHTML = '<iframe src="https://www.youtube.com/embed/' + videoId + '?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
-    btn.innerHTML = '<svg viewBox="0 0 16 16" style="fill:#fff"><rect x="3" y="2" width="3.5" height="12"/><rect x="9.5" y="2" width="3.5" height="12"/></svg>Pause';
-  }
-}
-
-function render() {
-  var list = document.getElementById('sermon-list');
-  var pag  = document.getElementById('pagination');
-  var cnt  = document.getElementById('results-count');
-  var total = filtered.length;
-  var pages = Math.max(1, Math.ceil(total / PER_PAGE));
-  var start = (currentPage - 1) * PER_PAGE;
-  var page  = filtered.slice(start, start + PER_PAGE);
-  cnt.innerHTML = 'Showing <strong>' + Math.min(total - start, PER_PAGE) + '</strong> of <strong>' + total + '</strong> sermons';
-  if (!total) {
-    list.innerHTML = '<div class="empty-state"><h3>No sermons found</h3><p>Try adjusting your filters or search.</p></div>';
-    pag.innerHTML = ''; return;
-  }
-  list.innerHTML = '<div class="sermon-grid">' + page.map(function(s,i){ return card(s, i===0 && currentPage===1); }).join('') + '</div>';
-  renderPag(pages);
-}
-
-function renderPag(pages) {
-  var pag = document.getElementById('pagination');
-  if (pages <= 1) { pag.innerHTML = ''; return; }
-  var h = '<button class="page-btn" onclick="goPage(' + (currentPage-1) + ')"' + (currentPage===1?' disabled':'') + '>&lsaquo; Prev</button>';
-  for (var i = 1; i <= pages; i++) {
-    if (pages > 7 && i > 2 && i < pages-1 && Math.abs(i-currentPage) > 1) {
-      if (i===3 || i===pages-2) h += '<span style="padding:6px 4px;color:var(--text3)">…</span>';
-      continue;
-    }
-    h += '<button class="page-btn' + (i===currentPage?' active':'') + '" onclick="goPage(' + i + ')">' + i + '</button>';
-  }
-  h += '<button class="page-btn" onclick="goPage(' + (currentPage+1) + ')"' + (currentPage===pages?' disabled':'') + '>Next &rsaquo;</button>';
-  pag.innerHTML = h;
-}
-
-function goPage(n) {
-  var pages = Math.ceil(filtered.length / PER_PAGE);
-  if (n < 1 || n > pages) return;
-  currentPage = n;
-  render();
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
-function setStatus(msg, ok) {
-  document.getElementById('status-text').textContent = msg;
-  document.getElementById('spinner').style.display = ok ? 'none' : '';
-  document.getElementById('feed-status').style.color = ok ? '#9a9895' : '#9a9895';
-}
-
-loadFeed();
-loadSubscribeLinks();
-
-// Show mobile filter bar on small screens
-if (window.innerWidth <= 900) {
-  document.getElementById('mobile-filter-bar').style.display = 'block';
-}
-window.addEventListener('resize', function() {
-  var bar = document.getElementById('mobile-filter-bar');
-  if (window.innerWidth <= 900) {
-    bar.style.display = 'block';
-  } else {
-    bar.style.display = 'none';
-    document.getElementById('sidebar').classList.remove('open');
-  }
-});
-
-function toggleFilters() {
-  var sidebar = document.querySelector('.sidebar');
-  var arrow = document.getElementById('filter-arrow');
-  var isOpen = sidebar.classList.toggle('open');
-  arrow.innerHTML = isOpen ? '&#9650;' : '&#9660;';
-  document.getElementById('filter-toggle').style.background = isOpen ? 'var(--bg3)' : 'var(--bg)';
-}
-</script>
 </body>
 </html>
