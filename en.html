@@ -23,7 +23,7 @@ html{scroll-behavior:smooth}
 body{font-family:'Inter',system-ui,sans-serif;background:var(--bg2);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
 nav{background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
 .nav-inner{max-width:1280px;margin:0 auto;padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
-.nav-logo img{height:36px;width:auto;display:block}
+.nav-logo img{height:36px;width:auto;display:block;max-width:160px;object-fit:contain}
 .nav-back{font-size:13px;color:var(--text2);text-decoration:none;display:flex;align-items:center;gap:5px;padding:5px 0;transition:color 0.15s}
 .nav-back:hover{color:var(--text)}
 .nav-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2}
@@ -87,6 +87,7 @@ nav{background:var(--bg);border-bottom:1px solid var(--border);position:sticky;t
 .btn-listen:hover{background:var(--accent2)}
 .btn-listen svg{width:11px;height:11px;fill:#fff;flex-shrink:0}
 .btn-watch{background:#c00!important}.btn-watch:hover{background:#a00!important}
+.btn-dl{background:var(--accent)!important;padding:6px 8px!important;min-width:34px;justify-content:center}
 .empty-state{text-align:center;padding:4rem 2rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg)}
 .empty-state h3{font-family:'Fraunces',serif;font-size:22px;font-weight:300;margin-bottom:6px}
 .empty-state p{font-size:14px;color:var(--text2)}
@@ -98,7 +99,7 @@ nav{background:var(--bg);border-bottom:1px solid var(--border);position:sticky;t
 .page-btn:disabled{opacity:0.35;cursor:not-allowed}
 footer{border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;margin-top:3rem;background:var(--bg)}
 footer p{font-size:12px;color:var(--text3)}
-footer img{height:20px;width:auto;vertical-align:middle;opacity:0.4;margin-right:6px}
+footer img{height:20px;width:auto;max-width:100px;vertical-align:middle;opacity:0.4;margin-right:6px;object-fit:contain}
 @media(max-width:900px){
   .nav-inner{padding:0 1rem}
   .layout{grid-template-columns:1fr;padding:0;gap:0}
@@ -120,12 +121,15 @@ footer img{height:20px;width:auto;vertical-align:middle;opacity:0.4;margin-right
   .page-btn{padding:5px 9px;font-size:12px;min-width:30px}
 }
 </style>
+  <!-- Capacitor -->
+  <script src="capacitor.js"></script>
+  <script src="capacitor-bridge.js"></script>
 </head>
 <body>
 
 <nav>
   <div class="nav-inner">
-    <a href="index.html"><img src="logo.png" alt="St Peter's Anglican Church Hornsby"></a>
+    <a href="index.html" class="nav-logo"><img src="logo.png" alt="St Peter's Anglican Church Hornsby"></a>
     <a href="index.html" class="nav-back">
       <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 5 5 12 12 19"/></svg>
       All languages
@@ -223,6 +227,55 @@ var channelImage = '';
 
 var BIBLE_BOOKS = ['Genesis','Exodus','Leviticus','Numbers','Deuteronomy','Joshua','Judges','Ruth','1 Samuel','2 Samuel','1 Kings','2 Kings','1 Chronicles','2 Chronicles','Ezra','Nehemiah','Esther','Job','Psalms','Psalm','Proverbs','Ecclesiastes','Song of Solomon','Song of Songs','Isaiah','Jeremiah','Lamentations','Ezekiel','Daniel','Hosea','Joel','Amos','Obadiah','Jonah','Micah','Nahum','Habakkuk','Zephaniah','Haggai','Zechariah','Malachi','Matthew','Mark','Luke','John','Acts','Romans','1 Corinthians','2 Corinthians','Galatians','Ephesians','Philippians','Colossians','1 Thessalonians','2 Thessalonians','1 Timothy','2 Timothy','Titus','Philemon','Hebrews','James','1 Peter','2 Peter','1 John','2 John','3 John','Jude','Revelation'];
 var BIBLICAL_ORDER = BIBLE_BOOKS;
+
+/* ── Native Downloads ── */
+var dlIcon = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 2v8M5 7l3 3 3-3"/><rect x="2" y="11" width="12" height="3" rx="1"/></svg>';
+var checkIcon = '<svg viewBox="0 0 16 16" fill="none" stroke="#15803d" stroke-width="2"><polyline points="3 8 7 12 13 4"/></svg>';
+var downloadedSermons = {};
+
+async function initDownloads() {
+  if (!window.nativeFileExists) return;
+  // Load state from localStorage
+  try { downloadedSermons = JSON.parse(localStorage.getItem('sph_dl') || '{}'); } catch(e) {}
+}
+
+function getFilename(s) {
+  var ext = (s.audioUrl || '').split('?')[0].split('.').pop() || 'mp3';
+  return 'sermon_' + s.id + '.' + ext;
+}
+
+async function handleDownload(e, id) {
+  e.stopPropagation();
+  if (!window.nativeDownload) return;
+  var s = allSermons.find(function(x){ return x.id === id; });
+  if (!s) return;
+  var btn = document.getElementById('dlbtn-' + id);
+  var filename = getFilename(s);
+
+  // Already downloaded — delete
+  if (downloadedSermons[id]) {
+    if (!confirm('Remove this download?')) return;
+    await window.nativeDeleteFile(filename);
+    delete downloadedSermons[id];
+    localStorage.setItem('sph_dl', JSON.stringify(downloadedSermons));
+    if (btn) btn.innerHTML = dlIcon;
+    return;
+  }
+
+  // Start download
+  if (btn) btn.innerHTML = '<span style="font-size:11px;color:#fff">0%</span>';
+  try {
+    await window.nativeDownload(s.audioUrl, filename, function(p) {
+      if (btn) btn.innerHTML = '<span style="font-size:11px;color:#fff">' + Math.round(p*100) + '%</span>';
+    });
+    downloadedSermons[id] = filename;
+    localStorage.setItem('sph_dl', JSON.stringify(downloadedSermons));
+    if (btn) btn.innerHTML = checkIcon;
+  } catch(err) {
+    if (btn) btn.innerHTML = dlIcon;
+    alert('Download failed. Please try again.');
+  }
+}
 
 async function loadFeed() {
   setStatus('Loading…', false);
@@ -387,6 +440,7 @@ function card(s, first) {
         ? '<button class="btn-listen" id="btn-' + s.id + '" onclick="togglePlayer(\'' + s.id + '\',this)">' + playIcon + 'Listen</button>'
         : '<a href="' + esc(s.link||'#') + '" target="_blank" rel="noopener" class="btn-listen">' + playIcon + 'Listen</a>') +
       (s.videoId ? '<button class="btn-listen btn-watch" onclick="toggleVideo(\'' + s.videoId + '\',\'' + s.id + '\',this)">' + watchIcon + 'Watch</button>' : '') +
+      (s.audioUrl ? '<button class="btn-listen btn-dl" id="dlbtn-' + s.id + '" onclick="handleDownload(event,' + s.id + ')">' + dlIcon + '</button>' : '') +
     '</div>' +
   '</div>';
 }
@@ -519,6 +573,7 @@ function toggleFilters() {
 
 loadFeed();
 loadSubscribeLinks();
+initDownloads();
 </script>
 </body>
 </html>
