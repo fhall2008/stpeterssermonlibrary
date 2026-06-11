@@ -18,7 +18,7 @@
 body{font-family:'Inter',system-ui,sans-serif;background:var(--bg2);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
 nav{background:var(--bg);border-bottom:1px solid var(--border)}
 .nav-inner{max-width:900px;margin:0 auto;padding:0 2rem;height:60px;display:flex;align-items:center}
-.nav-logo img{height:36px;width:auto;display:block}
+.nav-logo img{height:36px;width:auto;display:block;max-width:160px;object-fit:contain}
 .hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem 2rem;text-align:center}
 .hero-eyebrow{font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:1rem}
 .hero h1{font-family:'Fraunces',Georgia,serif;font-size:clamp(32px,5vw,52px);font-weight:300;color:var(--text);line-height:1.15;margin-bottom:0.75rem}
@@ -38,9 +38,12 @@ nav{background:var(--bg);border-bottom:1px solid var(--border)}
 .lang-card-rtl:hover .lang-card-cta svg{transform:translateX(-3px)}
 footer{border-top:1px solid var(--border);padding:1.5rem 2rem;text-align:center;background:var(--bg)}
 footer p{font-size:12px;color:var(--text3)}
-footer img{height:20px;width:auto;vertical-align:middle;opacity:0.4;margin-right:6px}
+footer img{height:20px;width:auto;max-width:100px;vertical-align:middle;opacity:0.4;margin-right:6px;object-fit:contain}
 @media(max-width:500px){.cards{flex-direction:column;align-items:center}.lang-card{max-width:100%;width:100%}}
 </style>
+  <!-- Capacitor -->
+  <script src="capacitor.js"></script>
+  <script src="capacitor-bridge.js"></script>
 </head>
 <body>
 
