@@ -28,8 +28,7 @@ nav{background:var(--bg);border-bottom:1px solid var(--border);position:sticky;t
 .nav-inner{max-width:1280px;margin:0 auto;padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
 .nav-logo img{height:36px;width:auto;display:block}
 .nav-right{display:flex;align-items:center;gap:8px}
-.admin-link{font-size:12px;color:var(--text3);text-decoration:none;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius);transition:all 0.15s}
-.admin-link:hover{color:var(--text);border-color:var(--border2)}
+
 .lang-tabs{display:flex;background:var(--bg3);border-radius:var(--radius);padding:3px;gap:2px}
 .lang-tab{padding:5px 14px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text2);border:none;background:none;border-radius:6px;cursor:pointer;transition:all 0.15s;font-weight:400}
 .lang-tab.active{background:var(--bg);color:var(--text);font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
@@ -174,7 +173,6 @@ footer img{height:24px;width:auto;vertical-align:middle;opacity:0.45;margin-righ
       <img src="logo.png" alt="St Peter's Anglican Church Hornsby">
     </a>
     <div class="nav-right">
-      <a href="admin.html" class="admin-link">Admin</a>
       <div class="lang-tabs">
         <button class="lang-tab active" onclick="setLang('en')" id="tab-en">English</button>
         <button class="lang-tab" onclick="setLang('fa')" id="tab-fa">&#x0641;&#x0627;&#x0631;&#x0633;&#x06CC;</button>
@@ -467,34 +465,6 @@ function parseAndRender(items, feedChannelImage) {
       videoId: item.videoId || '',
       videoUrl: item.videoUrl || ''
     });
-  });
-
-  var overrides = [];
-  try { overrides = JSON.parse(localStorage.getItem('sph_sermon_overrides')) || []; } catch(e) {}
-  var byRssId = {};
-  var manuals = [];
-  overrides.forEach(function(o){ if (o.rssId) byRssId[o.rssId] = o; else if (o.manual) manuals.push(o); });
-  sermons = sermons.filter(function(s){
-    var ov = byRssId['rss_' + s.id];
-    if (!ov) return true;
-    if (ov.hidden) return false;
-    if (ov.title) s.title = ov.title;
-    if (ov.speaker) s.speaker = ov.speaker;
-    if (ov.desc) s.desc = ov.desc;
-    if (ov.book) s.book = ov.book;
-    if (ov.topic) s.topic = ov.topic;
-    if (ov.series) s.series = ov.series;
-    if (ov.service) s.service = ov.service;
-    if (ov.audioUrl) s.audioUrl = ov.audioUrl;
-    if (ov.date) s.parsedDate = new Date(ov.date);
-    return true;
-  });
-  manuals.forEach(function(o){
-    if (o.hidden) return;
-    sermons.push({ id: o.id, title: o.title, desc: o.desc||'', pubDate: o.date,
-      parsedDate: o.date ? new Date(o.date) : new Date(0),
-      audioUrl: o.audioUrl||'', link:'', duration:'', speaker: o.speaker||'Unknown',
-      book: o.book||'', series: o.series||'', service: o.service||'', topic: o.topic||'', isManual:true });
   });
 
   allSermons = sermons;
