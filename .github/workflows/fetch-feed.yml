@@ -15,7 +15,7 @@ jobs:
 
       - name: Fetch RSS feed
         run: |
-          curl -s "https://anchor.fm/s/c1de3e94/podcast/rss" \
+          curl -s "https://podcasts.hornsbyanglican.org.au/@sph_sermons/feed.xml" \
                -H "User-Agent: Mozilla/5.0" \
                -o feed.xml
 
