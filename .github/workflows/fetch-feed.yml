@@ -15,7 +15,7 @@ jobs:
 
       - name: Fetch RSS feed
         run: |
-          curl -s "https://podcasts.hornsbyanglican.org.au/@sph_sermons/feed.xml" \
+          curl -s "https://anchor.fm/s/c1de3e94/podcast/rss" \
                -H "User-Agent: Mozilla/5.0" \
                -o feed.xml
 
@@ -24,10 +24,14 @@ jobs:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
         run: python3 parse_feed.py
 
-      - name: Commit feed.json
+      - name: Write config.js
+        run: |
+          echo "window.YT_API_KEY = '${{ secrets.YOUTUBE_API_KEY }}';" > config.js
+
+      - name: Commit feed.json and config.js
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add feed.json
+          git add feed.json config.js
           git diff --staged --quiet || git commit -m "chore: update sermon feed [skip ci]"
           git push
