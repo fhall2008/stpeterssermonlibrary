@@ -6,7 +6,7 @@ NS = {'itunes': 'http://www.itunes.com/dtds/podcast-1.0.dtd'}
 
 YOUTUBE_API_KEY    = os.environ.get('YOUTUBE_API_KEY', '')
 YOUTUBE_HANDLE     = '@StPetersHornsby'
-SERMON_PLAYLIST_ID = 'PLHaDvAO4RKLI3ffTMQHlhStmJVCrywJxt'  # real sermon videos only
+SERMON_PLAYLIST_ID = 'PLHaDvAO4RKLI3ffTMQHlhStmJVCrywJxt'
 
 def api_get(url):
     with urllib.request.urlopen(url, timeout=10) as r:
@@ -25,7 +25,7 @@ def resolve_channel_id(api_key):
     return None
 
 def get_playlist_videos(api_key, playlist_id):
-    """Fetch all videos from the sermon playlist. Returns {title_lower: video_id}."""
+    """Fetch all videos. Returns {video_id: (title, year)}."""
     videos = {}
     page_token = ''
     while True:
@@ -45,55 +45,75 @@ def get_playlist_videos(api_key, playlist_id):
             snip   = item['snippet']
             vid_id = snip['resourceId']['videoId']
             title  = snip['title'].strip()
-            videos[vid_id] = title
+            pub    = snip.get('publishedAt', '')
+            year_m = re.search(r'(20\d{2})', pub)
+            year   = year_m.group(1) if year_m else ''
+            videos[vid_id] = (title, year)
         page_token = data.get('nextPageToken', '')
         if not page_token:
             break
     return videos
 
-def best_match(query, playlist_videos):
+def best_match(query, playlist_videos, pub_date_str=''):
     """
-    Find the best matching video in the playlist for a given sermon title.
-    Strips common suffixes/prefixes and does a fuzzy word-overlap match.
-    Returns (video_url, video_id) or ('', '').
+    Match a sermon title to a YouTube video.
+    Uses Jaccard word overlap + year bonus/penalty for accuracy.
     """
     def normalise(s):
         s = s.lower()
-        s = re.sub(r'\|.*', '', s)          # remove series part after pipe
-        s = re.sub(r'[^\w\s]', ' ', s)     # strip punctuation
-        s = re.sub(r'\s+', ' ', s).strip()
-        return s
+        s = re.sub(r'\|.*', '', s)
+        s = re.sub(r'[^\w\s]', ' ', s)
+        return re.sub(r'\s+', ' ', s).strip()
 
-    q_words = set(normalise(query).split())
-    # Remove very common words that would cause false matches
-    stopwords = {'the','a','an','of','in','on','at','to','and','or','is','it','be','as','by','for','with','this','that','from','we','our','his','her','my','your'}
-    q_words -= stopwords
+    stopwords = {
+        'the','a','an','of','in','on','at','to','and','or','is','it',
+        'be','as','by','for','with','this','that','from','we','our',
+        'his','her','my','your','sunday','morning','evening','service'
+    }
 
+    # Extract year from podcast pubDate (e.g. "Sun, 12 Mar 2023 00:00:00 GMT")
+    pub_year = None
+    if pub_date_str:
+        m = re.search(r'\b(20\d{2})\b', pub_date_str)
+        if m:
+            pub_year = m.group(1)
+
+    q_words = set(normalise(query).split()) - stopwords
     if not q_words:
         return '', ''
 
-    best_score = 0
+    best_score = 0.0
     best_id    = ''
     best_title = ''
 
-    for vid_id, title in playlist_videos.items():
+    for vid_id, (title, vid_year) in playlist_videos.items():
         t_words = set(normalise(title).split()) - stopwords
         if not t_words:
             continue
         overlap = len(q_words & t_words)
+        if overlap == 0:
+            continue
+
         # Jaccard similarity
         score = overlap / len(q_words | t_words)
+
+        # Year weighting — critical for avoiding cross-year false matches
+        if pub_year and vid_year:
+            if pub_year == vid_year:
+                score *= 1.6   # strong boost for same year
+            else:
+                score *= 0.3   # heavy penalty for different year
+
         if score > best_score:
             best_score = score
             best_id    = vid_id
             best_title = title
 
-    # Only accept if similarity is high enough
-    if best_score >= 0.3:
-        print(f'    Matched "{best_title}" (score {best_score:.2f})')
+    if best_score >= 0.25:
+        print(f'    Matched: "{best_title}" (score {best_score:.2f}, pub_year={pub_year})')
         return f'https://www.youtube.com/watch?v={best_id}', best_id
 
-    print(f'    No match found (best score {best_score:.2f})')
+    print(f'    No match (best={best_score:.2f}, pub_year={pub_year})')
     return '', ''
 
 # ── Parse RSS ─────────────────────────────────────────────────────────────
@@ -117,6 +137,11 @@ if YOUTUBE_API_KEY:
     print(f'Fetching sermon playlist ({SERMON_PLAYLIST_ID})...')
     playlist_videos = get_playlist_videos(YOUTUBE_API_KEY, SERMON_PLAYLIST_ID)
     print(f'  {len(playlist_videos)} videos in playlist')
+    # Show year breakdown
+    years = {}
+    for vid_id, (t, y) in playlist_videos.items():
+        years[y] = years.get(y, 0) + 1
+    print(f'  Years: {dict(sorted(years.items()))}')
 else:
     print('No YOUTUBE_API_KEY — skipping YouTube matching')
 
@@ -125,7 +150,6 @@ cached_videos = {}
 try:
     with open('feed.json') as f:
         old = json.load(f)
-    # Only keep cache entries whose video ID is still in the playlist
     playlist_ids = set(playlist_videos.keys())
     for item in old.get('items', []):
         vid_id = item.get('videoId', '')
@@ -152,13 +176,12 @@ for idx, item in enumerate(channel_el.findall('item')):
     pipe_parts   = raw_title.split('|')
     title        = pipe_parts[0].strip()
     title_series = pipe_parts[-1].strip() if len(pipe_parts) > 1 else ''
+    pub_date     = gt('pubDate')
 
     enc       = item.find('enclosure')
     audio_url = enc.get('url', '') if enc is not None else ''
-    # Keep raw HTML so the browser can parse structured fields (Speaker:, Series:, Service:)
-    raw_desc  = gi('summary') or gt('description')
-    desc      = re.sub(r'<[^>]+>', ' ', raw_desc).strip()
-    raw_html  = raw_desc  # passed to feed.json for JS extraction
+    raw_html  = gi('summary') or gt('description')
+    desc      = re.sub(r'<[^>]+>', ' ', raw_html).strip()
     duration  = gi('duration')
     ep_img    = item.find('itunes:image', NS)
     image     = ep_img.get('href', '') if ep_img is not None else ''
@@ -168,27 +191,35 @@ for idx, item in enumerate(channel_el.findall('item')):
     if title in cached_videos:
         video_url = cached_videos[title]['videoUrl']
         video_id  = cached_videos[title]['videoId']
-        print(f'Cached: "{title}"')
+        print(f'Cached: "{title}" ({pub_date})')
     elif playlist_videos:
-        print(f'Matching: "{title}"')
-        video_url, video_id = best_match(title, playlist_videos)
+        print(f'Matching: "{title}" ({pub_date})')
+        video_url, video_id = best_match(title, playlist_videos, pub_date)
 
     items.append({
-        'id': idx, 'title': title, 'titleSeries': title_series,
-        'desc': desc, 'pubDate': gt('pubDate'),
-        'audioUrl': audio_url, 'link': gt('link'),
-        'duration': duration, 'speaker': gi('author'),
-        'image': image, 'videoUrl': video_url, 'videoId': video_id, 'rawHtml': raw_html,
+        'id':          idx,
+        'title':       title,
+        'titleSeries': title_series,
+        'desc':        desc,
+        'rawHtml':     raw_html,
+        'pubDate':     pub_date,
+        'audioUrl':    audio_url,
+        'link':        gt('link'),
+        'duration':    duration,
+        'speaker':     gi('author'),
+        'image':       image,
+        'videoUrl':    video_url,
+        'videoId':     video_id,
     })
 
 output = {
     'channelImage': channel_image,
-    'items': items,
-    'updated': datetime.utcnow().isoformat() + 'Z',
+    'items':        items,
+    'updated':      datetime.utcnow().isoformat() + 'Z',
 }
 
 with open('feed.json', 'w') as f:
     json.dump(output, f)
 
 matched = sum(1 for i in items if i['videoId'])
-print(f'\nDone. {len(items)} sermons, {matched} matched to playlist videos.')
+print(f'\nDone. {len(items)} sermons, {matched} YouTube matches.')
