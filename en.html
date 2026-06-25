@@ -234,9 +234,12 @@ var checkIcon = '<svg viewBox="0 0 16 16" fill="none" stroke="#15803d" stroke-wi
 var downloadedSermons = {};
 
 async function initDownloads() {
-  if (!window.nativeFileExists) return;
-  // Load state from localStorage
   try { downloadedSermons = JSON.parse(localStorage.getItem('sph_dl') || '{}'); } catch(e) {}
+  // Refresh button states
+  Object.keys(downloadedSermons).forEach(function(id) {
+    var btn = document.getElementById('dlbtn-' + id);
+    if (btn) btn.innerHTML = checkIcon;
+  });
 }
 
 function getFilename(s) {
@@ -246,34 +249,68 @@ function getFilename(s) {
 
 async function handleDownload(e, id) {
   e.stopPropagation();
-  if (!window.nativeDownload) return;
-  var s = allSermons.find(function(x){ return x.id === id; });
-  if (!s) return;
+  var s = allSermons.find(function(x){ return String(x.id) === String(id); });
+  if (!s || !s.audioUrl) return;
   var btn = document.getElementById('dlbtn-' + id);
-  var filename = getFilename(s);
 
-  // Already downloaded — delete
-  if (downloadedSermons[id]) {
-    if (!confirm('Remove this download?')) return;
-    await window.nativeDeleteFile(filename);
-    delete downloadedSermons[id];
-    localStorage.setItem('sph_dl', JSON.stringify(downloadedSermons));
-    if (btn) btn.innerHTML = dlIcon;
+  // Capacitor native download
+  if (window.nativeDownload) {
+    var filename = getFilename(s);
+    if (downloadedSermons[id]) {
+      if (!confirm('Remove this download?')) return;
+      await window.nativeDeleteFile(filename);
+      delete downloadedSermons[id];
+      localStorage.setItem('sph_dl', JSON.stringify(downloadedSermons));
+      if (btn) btn.innerHTML = dlIcon;
+      return;
+    }
+    if (btn) btn.innerHTML = '<span style="font-size:11px;color:#fff">0%</span>';
+    try {
+      await window.nativeDownload(s.audioUrl, filename, function(p) {
+        if (btn) btn.innerHTML = '<span style="font-size:11px;color:#fff">' + Math.round(p*100) + '%</span>';
+      });
+      downloadedSermons[id] = filename;
+      localStorage.setItem('sph_dl', JSON.stringify(downloadedSermons));
+      if (btn) btn.innerHTML = checkIcon;
+    } catch(err) {
+      if (btn) btn.innerHTML = dlIcon;
+      alert('Download failed. Please try again.');
+    }
     return;
   }
 
-  // Start download
-  if (btn) btn.innerHTML = '<span style="font-size:11px;color:#fff">0%</span>';
+  // Browser download — fetch with progress then trigger save
+  if (btn) btn.innerHTML = '<span style="font-size:10px;color:#fff">...</span>';
   try {
-    await window.nativeDownload(s.audioUrl, filename, function(p) {
-      if (btn) btn.innerHTML = '<span style="font-size:11px;color:#fff">' + Math.round(p*100) + '%</span>';
-    });
-    downloadedSermons[id] = filename;
+    var response = await fetch(s.audioUrl);
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    var blob = await response.blob();
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = (s.title || 'sermon') + '.' + (s.audioUrl.split('?')[0].split('.').pop() || 'mp3');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    downloadedSermons[id] = true;
     localStorage.setItem('sph_dl', JSON.stringify(downloadedSermons));
     if (btn) btn.innerHTML = checkIcon;
+    setTimeout(function() {
+      if (btn) btn.innerHTML = dlIcon;
+      delete downloadedSermons[id];
+      localStorage.setItem('sph_dl', JSON.stringify(downloadedSermons));
+    }, 3000);
   } catch(err) {
+    // Fallback: direct link
+    var a = document.createElement('a');
+    a.href = s.audioUrl;
+    a.download = s.title || 'sermon';
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
     if (btn) btn.innerHTML = dlIcon;
-    alert('Download failed. Please try again.');
   }
 }
 
