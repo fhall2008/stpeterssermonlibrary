@@ -217,8 +217,9 @@ footer img{height:20px;width:auto;vertical-align:middle;opacity:0.3;margin-right
   </div>
 </div>
 
+<script src="config.js"></script>
 <script>
-var API_KEY = 'YOUR_YOUTUBE_API_KEY';  // Replace with your YouTube Data API key
+var API_KEY = window.YT_API_KEY || '';
 
 var PLAYLISTS = {
   en: [
