@@ -147,20 +147,26 @@ else:
 
 # ── Load cached matches ───────────────────────────────────────────────────
 cached_videos = {}
-try:
-    with open('feed.json') as f:
-        old = json.load(f)
-    playlist_ids = set(playlist_videos.keys())
-    for item in old.get('items', []):
-        vid_id = item.get('videoId', '')
-        if vid_id and (not playlist_ids or vid_id in playlist_ids):
-            cached_videos[item['title']] = {
-                'videoUrl': item.get('videoUrl', ''),
-                'videoId':  vid_id,
-            }
-    print(f'Loaded {len(cached_videos)} cached matches')
-except Exception:
-    pass
+# NOTE: Cache intentionally disabled to force re-matching with year-aware logic.
+# Re-enable after confirming matches are correct by setting USE_CACHE = True
+USE_CACHE = False
+if USE_CACHE:
+    try:
+        with open('feed.json') as f:
+            old = json.load(f)
+        playlist_ids = set(playlist_videos.keys())
+        for item in old.get('items', []):
+            vid_id = item.get('videoId', '')
+            if vid_id and (not playlist_ids or vid_id in playlist_ids):
+                cached_videos[item['title']] = {
+                    'videoUrl': item.get('videoUrl', ''),
+                    'videoId':  vid_id,
+                }
+        print(f'Loaded {len(cached_videos)} cached matches')
+    except Exception:
+        pass
+else:
+    print('Cache disabled — re-matching all sermons')
 
 # ── Parse items ───────────────────────────────────────────────────────────
 items = []
