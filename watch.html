@@ -141,6 +141,7 @@ footer img{height:20px;width:auto;vertical-align:middle;opacity:0.3;margin-right
     <div class="lang-toggle">
       <button class="lang-btn active" onclick="setLang('en')" id="lang-en">English</button>
       <button class="lang-btn" onclick="setLang('fa')" id="lang-fa">&#x0641;&#x0627;&#x0631;&#x0633;&#x06CC;</button>
+      <button class="lang-btn" onclick="setLang('zh')" id="lang-zh">&#x4e2d;&#x6587;</button>
     </div>
   </div>
 </nav>
@@ -247,6 +248,7 @@ function setLang(lang) {
   currentLang = lang;
   document.getElementById('lang-en').classList.toggle('active', lang === 'en');
   document.getElementById('lang-fa').classList.toggle('active', lang === 'fa');
+  document.getElementById('lang-zh').classList.toggle('active', lang === 'zh');
   document.getElementById('search-input').value = '';
   document.getElementById('search-results').style.display = 'none';
   document.getElementById('rows-container').style.display = '';
